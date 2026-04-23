@@ -32,13 +32,6 @@ export default function PropertyCard({ property, index }) {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           />
 
-          {/* Coordinate overlay */}
-          <div className="absolute bottom-3 left-3">
-            <p className="font-mono text-[9px] tracking-[0.15em] text-white/50">
-              {property.coordinates || "40°44'N 73°59'W"}
-            </p>
-          </div>
-
           {/* Status badge */}
           {property.status === "available" && (
             <div className="absolute top-3 right-3">
