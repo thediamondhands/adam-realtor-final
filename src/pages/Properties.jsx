@@ -1,19 +1,40 @@
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/lib/supabaseClient"; // Switched to Supabase
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 export default function Properties() {
   const { data: properties = [], isLoading } = useQuery({
     queryKey: ["all-properties"],
-    queryFn: () => base44.entities.Property.list("-created_date", 50),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .order('created_date', { ascending: false });
+      
+      if (error) throw error;
+      return data;
+    },
     initialData: [],
   });
 
   const formatPrice = (price) => {
-    if (price >= 1000000) return `$${(price / 1000000).toFixed(1)}M`;
-    if (price >= 1000) return `$${(price / 1000).toFixed(0)}K`;
-    return `$${price}`;
+    const numPrice = Number(price);
+    if (numPrice >= 1000000) return `$${(numPrice / 1000000).toFixed(1)}M`;
+    if (numPrice >= 1000) return `$${(numPrice / 1000).toFixed(0)}K`;
+    return `$${numPrice}`;
+  };
+
+  // This cleans up the image links from your CSV
+  const getImageUrl = (property) => {
+    if (!property.images) return "https://via.placeholder.com/800x1000?text=No+Image";
+    try {
+      // If images are stored as a string like '["url"]', parse it
+      const imgArray = typeof property.images === 'string' ? JSON.parse(property.images) : property.images;
+      return imgArray[0];
+    } catch (e) {
+      return property.images;
+    }
   };
 
   return (
@@ -50,7 +71,7 @@ export default function Properties() {
               <Link to={`/property/${property.id}`} className="group">
                 <div className="relative aspect-[4/5] overflow-hidden bg-secondary mb-5">
                   <img
-                    src={property.images?.[0] || "https://media.base44.com/images/public/69e9765ab76b60a63d59c206/1e7caa363_generated_376820cf.png"}
+                    src={getImageUrl(property)}
                     alt={property.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
@@ -58,13 +79,6 @@ export default function Properties() {
                     <div className="absolute top-3 right-3">
                       <span className="font-mono text-[9px] tracking-[0.2em] uppercase bg-primary/90 text-primary-foreground px-3 py-1">
                         For Sale
-                      </span>
-                    </div>
-                  )}
-                  {property.status === "pending" && (
-                    <div className="absolute top-3 right-3">
-                      <span className="font-mono text-[9px] tracking-[0.2em] uppercase bg-primary/90 text-primary-foreground px-3 py-1">
-                        Under Contract
                       </span>
                     </div>
                   )}
@@ -95,7 +109,7 @@ export default function Properties() {
                   {property.sqft && (
                     <>
                       <span className="text-border">|</span>
-                      <span>{property.sqft.toLocaleString()} SF</span>
+                      <span>{Number(property.sqft).toLocaleString()} SF</span>
                     </>
                   )}
                 </div>
