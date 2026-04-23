@@ -7,8 +7,8 @@ export default function Hero() {
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="https://media.base44.com/images/public/69e9765ab76b60a63d59c206/36dfb9047_generated_image.png"
-          alt="Beautiful Florida coastal farmhouse home with palm trees and blue sky"
+          src="https://media.base44.com/images/public/69e9765ab76b60a63d59c206/2276e8f7c_generated_image.png"
+          alt="Florida suburban farmhouse style home with white siding and covered porch"
           className="w-full h-full object-cover" />
         
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/50" />
