@@ -9,6 +9,7 @@ import SiteLayout from './components/layout/SiteLayout';
 import Home from './pages/Home';
 import Properties from './pages/Properties';
 import PropertyDetail from './pages/PropertyDetail';
+import Inquiry from './pages/Inquiry';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -40,6 +41,7 @@ const AuthenticatedApp = () => {
         <Route path="/" element={<Home />} />
         <Route path="/properties" element={<Properties />} />
         <Route path="/property/:id" element={<PropertyDetail />} />
+        <Route path="/inquiry" element={<Inquiry />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
