@@ -40,7 +40,7 @@ export default function Portfolio() {
   if (properties.length === 0) return null;
 
   return (
-    <section ref={containerRef} className="relative" style={{ height: `${Math.max(200, properties.length * 60)}vh` }}>
+    <section ref={containerRef} className="relative" style={{ height: `${Math.max(200, properties.length * 25)}vh` }}>
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Header */}
         <div className="px-[8vw] pt-16 pb-8">
