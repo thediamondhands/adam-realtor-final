@@ -49,14 +49,7 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Coordinate Typography */}
-      <div className="absolute top-8 right-[8vw] z-10">
-        <p className="font-mono text-[10px] tracking-[0.2em] text-white/40 text-right">
-          40°44'N 73°59'W
-          <br />
-          EST. 2024
-        </p>
-      </div>
+
     </section>);
 
 }
