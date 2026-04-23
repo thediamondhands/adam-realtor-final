@@ -1,16 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const lastScrollY = useRef(0);
   const location = useLocation();
   const isHome = location.pathname === "/";
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      if (currentY < 50) {
+        setVisible(true);
+      } else if (currentY > lastScrollY.current) {
+        setVisible(false);
+      } else {
+        setVisible(true);
+      }
+      lastScrollY.current = currentY;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 px-[8vw] py-6 flex items-center justify-between transition-colors duration-500 ${isHome ? "text-white" : "text-foreground bg-background/80 backdrop-blur-md border-b structural-rule"}`}>
+      <motion.nav
+        animate={{ y: visible ? 0 : "-100%" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className={`fixed top-0 left-0 right-0 z-50 px-[8vw] py-6 flex items-center justify-between transition-colors duration-500 ${isHome ? "text-white" : "text-foreground bg-background/80 backdrop-blur-md border-b structural-rule"}`}>
         <Link to="/" className="font-heading text-2xl tracking-wide flex items-center gap-2">
           Adam Lester Realtor®
         </Link>
@@ -45,7 +66,7 @@ export default function Navbar() {
         >
           <Menu className="w-6 h-6" />
         </button>
-      </nav>
+      </motion.nav>
 
       {/* Mobile Menu */}
       <AnimatePresence>
