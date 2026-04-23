@@ -138,16 +138,8 @@ export default function Testimonials() {
 
     animationId = requestAnimationFrame(animate);
 
-    const pause = () => cancelAnimationFrame(animationId);
-    const resume = () => { animationId = requestAnimationFrame(animate); };
-
-    track.addEventListener("mouseenter", pause);
-    track.addEventListener("mouseleave", resume);
-
     return () => {
       cancelAnimationFrame(animationId);
-      track.removeEventListener("mouseenter", pause);
-      track.removeEventListener("mouseleave", resume);
     };
   }, []);
 
