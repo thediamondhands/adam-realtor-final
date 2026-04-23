@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="px-[8vw] py-16 border-t structural-rule">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
         <div className="md:col-span-4">
-          <h3 className="font-heading text-3xl font-light mb-4">🌊 Adam Lester Realtor®</h3>
+          <h3 className="font-heading text-3xl font-light mb-4">Adam Lester Realtor®</h3>
           <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
             Full-time Realtor® serving MidWest Florida — Manatee, Sarasota, Pinellas & Hillsborough County. 7 days a week, 365 days a year.
           </p>
