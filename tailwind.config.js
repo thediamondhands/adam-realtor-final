@@ -5,9 +5,9 @@ module.exports = {
   theme: {
   	extend: {
   		fontFamily: {
-  			heading: ['var(--font-heading)'],
-  			body: ['var(--font-body)'],
-  			mono: ['var(--font-mono)'],
+  			heading: ['Playfair Display', 'var(--font-heading)', 'serif'],
+  			body: ['Lato', 'var(--font-body)', 'sans-serif'],
+  			mono: ['Source Code Pro', 'var(--font-mono)', 'monospace'],
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

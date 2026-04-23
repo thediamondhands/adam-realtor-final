@@ -50,9 +50,9 @@ export default function Portfolio() {
                 Curated Portfolio
               </p>
               <h2 className="font-heading text-4xl md:text-6xl lg:text-7xl font-light text-foreground leading-[0.95]">
-                Selected
+                Florida
                 <br />
-                <span className="italic">Properties</span>
+                <span className="italic">Listings</span>
               </h2>
             </div>
             <div className="hidden md:block">
