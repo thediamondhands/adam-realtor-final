@@ -16,10 +16,14 @@ export default function Portfolio() {
   });
 
   const handleWheel = (e) => {
-    if (!scrollRef.current) return;
-    e.preventDefault();
-    scrollRef.current.scrollLeft += e.deltaY;
+    if (!scrollRef.current || !isHovered) return;
     const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
+    const atStart = scrollRef.current.scrollLeft === 0 && e.deltaY < 0;
+    const atEnd = scrollRef.current.scrollLeft >= maxScroll && e.deltaY > 0;
+    if (!atStart && !atEnd) {
+      e.preventDefault();
+    }
+    scrollRef.current.scrollLeft += e.deltaY;
     const progress = scrollRef.current.scrollLeft / maxScroll;
     setScrollProgress(Math.max(0, Math.min(1, progress)));
   };
@@ -60,10 +64,10 @@ export default function Portfolio() {
       <div
         ref={scrollRef}
         onWheel={handleWheel}
+        style={{ scrollBehavior: "auto" }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className="horizontal-scroll-section flex gap-6 md:gap-10 px-[8vw] overflow-x-scroll pt-6 pb-10 cursor-grab"
-        style={{ scrollBehavior: "auto" }}
       >
         {properties.map((property, index) => (
           <PropertyCard key={property.id} property={property} index={index} />
