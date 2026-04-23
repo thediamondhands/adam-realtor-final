@@ -40,10 +40,24 @@ export default function PropertyCard({ property, index }) {
           </div>
 
           {/* Status badge */}
+          {property.status === "available" && (
+            <div className="absolute top-3 right-3">
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase bg-primary/90 text-primary-foreground px-3 py-1">
+                For Sale
+              </span>
+            </div>
+          )}
           {property.status === "pending" && (
             <div className="absolute top-3 right-3">
               <span className="font-mono text-[9px] tracking-[0.2em] uppercase bg-primary/90 text-primary-foreground px-3 py-1">
                 Under Contract
+              </span>
+            </div>
+          )}
+          {property.status === "sold" && (
+            <div className="absolute top-3 right-3">
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase bg-foreground/90 text-background px-3 py-1">
+                Sold
               </span>
             </div>
           )}
