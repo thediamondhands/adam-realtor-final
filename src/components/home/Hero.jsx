@@ -22,12 +22,12 @@ export default function Hero() {
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="font-mono text-xs tracking-[0.3em] text-white/60 uppercase mb-4">
-            Curator of Living Spaces
+            MidWest Florida Realtor®
           </p>
           <h1 className="font-heading text-white text-5xl md:text-7xl lg:text-[8vw] leading-[0.9] font-light max-w-[80vw]">
-            Architecture
+            Adam Lester
             <br />
-            <span className="italic font-light">for Living</span>
+            <span className="italic font-light">Realtor®</span>
           </h1>
         </motion.div>
 

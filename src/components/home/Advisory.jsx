@@ -37,42 +37,33 @@ export default function Advisory() {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-6">
-            The Approach
+            About Adam
           </p>
           <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-light leading-[0.95] mb-8">
-            Not a salesperson.
+            Full-time.
             <br />
-            <span className="italic">A consultant.</span>
+            <span className="italic">365 days a year.</span>
           </h2>
           <p className="text-muted-foreground leading-relaxed max-w-lg mb-6">
-            Every property tells a story of craftsmanship, light, and intention.
-            My role is to understand the life you're designing and match it with
-            architecture that elevates your daily experience.
+            Realtor® in MidWest Florida, servicing Manatee, Sarasota, Pinellas, and Hillsborough County. I work primarily as a listing agent, but I take on a few qualified buyers at a time.
           </p>
           <p className="text-muted-foreground leading-relaxed max-w-lg mb-8">
-            With over a decade of navigating luxury real estate markets, I bring
-            a curatorial eye and an advisor's discretion to every engagement.
+            Contact me today for a free home evaluation — I'm available 7 days a week and committed to delivering results for every client.
           </p>
 
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 pt-8 border-t structural-rule">
-            <div>
-              <p className="font-heading text-3xl md:text-4xl font-light text-foreground">150+</p>
-              <p className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground uppercase mt-1">
-                Properties Placed
-              </p>
+          {/* Contact */}
+          <div className="grid grid-cols-1 gap-3 pt-8 border-t structural-rule">
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">Phone</span>
+              <a href="tel:9415801655" className="font-heading text-xl font-light text-foreground hover:text-primary transition-colors">(941) 580-1655</a>
             </div>
-            <div>
-              <p className="font-heading text-3xl md:text-4xl font-light text-foreground">$2B+</p>
-              <p className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground uppercase mt-1">
-                Transaction Volume
-              </p>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">Email</span>
+              <a href="mailto:Contact.AdamLester@gmail.com" className="font-heading text-xl font-light text-foreground hover:text-primary transition-colors">Contact.AdamLester@gmail.com</a>
             </div>
-            <div>
-              <p className="font-heading text-3xl md:text-4xl font-light text-foreground">12</p>
-              <p className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground uppercase mt-1">
-                Years of Practice
-              </p>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">Instagram</span>
+              <a href="https://www.instagram.com/FL_Realtor_Adam" target="_blank" rel="noopener noreferrer" className="font-heading text-xl font-light text-foreground hover:text-primary transition-colors">@FL_Realtor_Adam</a>
             </div>
           </div>
         </motion.div>
