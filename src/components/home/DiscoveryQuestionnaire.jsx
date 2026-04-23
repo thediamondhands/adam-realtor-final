@@ -58,10 +58,7 @@ export default function DiscoveryQuestionnaire() {
           Let's Talk Real Estate
         </h2>
         <p className="text-muted-foreground mb-10 max-w-lg">
-          Interested in a free consultation, your home's value, MLS buyer home search, or recommended lending partners? Fill out this quick form and Adam will personally reach out.
-        </p>
-        <p className="font-mono text-[11px] tracking-[0.15em] text-muted-foreground mb-10">
-          No ads, no spam, just friendly real estate advice.
+          Interested in a free consultation, your home's value, MLS buyer home search, or recommended lending partners? Fill out this quick form and Adam will personally reach out. No ads, no spam, just friendly real estate advice.
         </p>
 
         <div className="flex flex-col gap-5">
