@@ -172,7 +172,7 @@ export default function Testimonials() {
 
       <div className="mt-10 text-center">
         <a
-          href="https://www.google.com/search?q=Adam+Lester+Realtor+Dalton+Wade+Florida"
+          href="https://www.google.com/search?q=Adam+Lester+Realtor+Florida"
           target="_blank"
           rel="noopener noreferrer"
           className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase hover:text-foreground transition-colors"
