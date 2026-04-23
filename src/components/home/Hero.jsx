@@ -21,7 +21,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}>
           
-          <p className="font-mono text-xs tracking-[0.3em] text-white/70 uppercase mb-4">MANATEE · SARASOTA · PINELLAS · HILLSBOROUGH
+          <p className="font-mono text-xs tracking-[0.3em] text-white/70 uppercase mb-4">MIDWEST FLORIDA REALTOR® · MANATEE · SARASOTA · PINELLAS · HILLSBOROUGH
 
           </p>
           <h1 className="font-heading text-white text-5xl md:text-7xl lg:text-[8vw] leading-[0.9] font-light max-w-[80vw]">
