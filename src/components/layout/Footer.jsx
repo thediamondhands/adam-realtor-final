@@ -30,7 +30,7 @@ export default function Footer() {
             <a href="tel:9415801655" className="hover:text-primary transition-colors">(941) 580-1655</a>
             <a href="mailto:Contact.AdamLester@gmail.com" className="hover:text-primary transition-colors">Contact.AdamLester@gmail.com</a>
             <a href="https://www.instagram.com/FL_Realtor_Adam" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">@FL_Realtor_Adam</a>
-            <p>MidWest Florida</p>
+            <p>10905 Erie Rd, Parrish, FL 34219</p>
           </div>
         </div>
       </div>
