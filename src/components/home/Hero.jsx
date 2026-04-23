@@ -7,10 +7,10 @@ export default function Hero() {
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1920&q=80"
-          alt="Coastal Florida farmhouse home with blue sky and lush greenery"
-          className="w-full h-full object-cover"
-        />
+          src="https://media.base44.com/images/public/69e9765ab76b60a63d59c206/74af20e8b_generated_3b0055fb.png"
+          alt="Luxury modern home exterior at golden hour with clean geometric lines and floor-to-ceiling glass"
+          className="w-full h-full object-cover" />
+        
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/50" />
       </div>
 
@@ -19,15 +19,15 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <p className="font-mono text-xs tracking-[0.3em] text-white/70 uppercase mb-4">
-            MidWest Florida Realtor® · Manatee · Sarasota · Pinellas · Hillsborough
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}>
+          
+          <p className="font-mono text-xs tracking-[0.3em] text-white/70 uppercase mb-4">MANATEE · SARASOTA · PINELLAS · HILLSBOROUGH
+
           </p>
-          <h1 className="font-heading text-white text-5xl md:text-7xl lg:text-[7vw] leading-[1.05] font-semibold max-w-[85vw]">
-            Find Your
+          <h1 className="font-heading text-white text-5xl md:text-7xl lg:text-[8vw] leading-[0.9] font-light max-w-[80vw]">
+            Adam Lester
             <br />
-            <span className="italic font-normal">Florida Home</span>
+            <span className="italic font-light">Realtor®</span>
           </h1>
         </motion.div>
 
@@ -35,15 +35,15 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 1 }}
-          className="mt-8 flex items-center gap-4"
-        >
-          <span className="font-mono text-xs tracking-[0.2em] text-white/60 uppercase">
-            Call (941) 580-1655 for a free home evaluation
+          className="mt-8 flex items-center gap-4">
+          
+          <span className="font-mono text-xs tracking-[0.2em] text-white/50 uppercase">
+            Scroll to explore
           </span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          >
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
+            
             <ArrowDown className="w-4 h-4 text-white/50" />
           </motion.div>
         </motion.div>
@@ -51,12 +51,12 @@ export default function Hero() {
 
       {/* Coordinate Typography */}
       <div className="absolute top-8 right-[8vw] z-10">
-        <p className="font-mono text-[10px] tracking-[0.2em] text-white/50 text-right">
-          BRADENTON · SARASOTA · TAMPA
+        <p className="font-mono text-[10px] tracking-[0.2em] text-white/40 text-right">
+          40°44'N 73°59'W
           <br />
-          FLORIDA'S GULF COAST
+          EST. 2024
         </p>
       </div>
-    </section>
-  );
+    </section>);
+
 }
