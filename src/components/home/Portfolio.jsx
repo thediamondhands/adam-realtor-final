@@ -11,7 +11,7 @@ export default function Portfolio() {
 
   const { data: properties = [] } = useQuery({
     queryKey: ["properties-featured"],
-    queryFn: () => base44.entities.Property.filter({ status: "available" }, "-created_date", 10),
+    queryFn: () => base44.entities.Property.list("-created_date", 10),
     initialData: [],
   });
 
