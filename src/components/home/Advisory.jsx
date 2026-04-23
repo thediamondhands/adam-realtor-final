@@ -14,7 +14,7 @@ export default function Advisory() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}>
           
-          <div className="relative aspect-[3/4] overflow-hidden">
+          <div className="relative aspect-[3/4] overflow-hidden max-w-xs mx-auto lg:max-w-none">
             <img src="https://media.base44.com/images/public/69e9765ab76b60a63d59c206/c8438e106_adamlester.png"
 
             alt="Elegant modern office with natural light and marble surfaces" className="w-full h-full object-cover object-top" />
