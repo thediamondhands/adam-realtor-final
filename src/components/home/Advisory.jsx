@@ -12,14 +12,14 @@ export default function Advisory() {
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
+          transition={{ duration: 0.8 }}>
+          
           <div className="relative aspect-[3/4] overflow-hidden">
-            <img
-              src="https://lh3.googleusercontent.com/sitesv/AA5AbUCuu11HMYezC7JxSt1A64bp_ZQ3FcaKl312gs6Ju2MqHzVRczjzUuX-sMkYvXwK2wGbFuin1hbHeUUqv0-j3WcLXEw1b9TIiAmXKd_B8TjvtLtGaymeC8iE4CT-E_b6RN77otfeMUEUC8zmh-zKDKIZ5h6DgGy5nar_ec-dId4GnNp4BbQ0Ntkh_Kp6TFQ4dCOpQBUnUhUAxcGItzRlRNPB8aODkbGXdGa956Q=w1280"
-              alt="Adam Lester - Florida Realtor"
-              className="w-full h-full object-cover object-top"
-            />
+            <img src="https://media.base44.com/images/public/69e9765ab76b60a63d59c206/c8438e106_adamlester.png"
+
+            alt="Elegant modern office with natural light and marble surfaces" className="w-full h-full object-cover object-top" />
+
+            
             <div className="absolute bottom-4 left-4">
               <p className="font-mono text-[9px] tracking-[0.15em] text-white/50">
                 THE ADVISORY
@@ -34,8 +34,8 @@ export default function Advisory() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
+          transition={{ duration: 0.8, delay: 0.2 }}>
+          
           <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-6">
             About Adam
           </p>
@@ -68,6 +68,6 @@ export default function Advisory() {
           </div>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
