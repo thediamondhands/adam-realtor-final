@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { Star } from "lucide-react";
 
 const testimonials = [
@@ -94,57 +94,91 @@ const testimonials = [
   },
 ];
 
-function Stars({ count }) {
+function ReviewCard({ t }) {
   return (
-    <div className="flex gap-0.5 mb-4">
-      {Array.from({ length: count }).map((_, i) => (
-        <Star key={i} className="w-3.5 h-3.5 fill-primary text-primary" />
-      ))}
+    <div className="flex-shrink-0 w-80 border border-border p-7 bg-background">
+      <div className="flex gap-0.5 mb-4">
+        {Array.from({ length: t.stars }).map((_, i) => (
+          <Star key={i} className="w-3.5 h-3.5 fill-primary text-primary" />
+        ))}
+      </div>
+      <p className="text-foreground leading-relaxed mb-6 font-body text-sm line-clamp-5">
+        "{t.text}"
+      </p>
+      <div className="border-t structural-rule pt-4">
+        <p className="font-heading text-base font-light">{t.name}</p>
+        <p className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground uppercase mt-1">
+          {t.source}
+        </p>
+      </div>
     </div>
   );
 }
 
 export default function Testimonials() {
+  const trackRef = useRef(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    let animationId;
+    let position = 0;
+    const speed = 0.5;
+
+    const animate = () => {
+      position -= speed;
+      const halfWidth = track.scrollWidth / 2;
+      if (Math.abs(position) >= halfWidth) {
+        position = 0;
+      }
+      track.style.transform = `translateX(${position}px)`;
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animationId = requestAnimationFrame(animate);
+
+    const pause = () => cancelAnimationFrame(animationId);
+    const resume = () => { animationId = requestAnimationFrame(animate); };
+
+    track.addEventListener("mouseenter", pause);
+    track.addEventListener("mouseleave", resume);
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      track.removeEventListener("mouseenter", pause);
+      track.removeEventListener("mouseleave", resume);
+    };
+  }, []);
+
+  const doubled = [...testimonials, ...testimonials];
+
   return (
-    <section className="py-24 md:py-32 px-[8vw]">
-      <div className="w-full h-px structural-rule border-t mb-16" />
-
-      <div className="mb-12">
-        <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-3">
-          Client Reviews
-        </p>
-        <h2 className="font-heading text-4xl md:text-6xl font-light leading-[0.95]">
-          What Clients
-          <br />
-          <span className="italic">Are Saying</span>
-        </h2>
+    <section className="py-24 md:py-32">
+      <div className="px-[8vw]">
+        <div className="w-full h-px structural-rule border-t mb-16" />
+        <div className="mb-12">
+          <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-3">
+            Client Reviews
+          </p>
+          <h2 className="font-heading text-4xl md:text-6xl font-light leading-[0.95]">
+            What Clients
+            <br />
+            <span className="italic">Are Saying</span>
+          </h2>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {testimonials.map((t, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: (i % 3) * 0.1 }}
-            className="border border-border p-8"
-          >
-            <Stars count={t.stars} />
-            <p className="text-foreground leading-relaxed mb-8 font-body">
-              "{t.text}"
-            </p>
-            <div className="border-t structural-rule pt-4">
-              <p className="font-heading text-lg font-light">{t.name}</p>
-              <p className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground uppercase mt-1">
-                {t.source}
-              </p>
-            </div>
-          </motion.div>
-        ))}
+      {/* Infinite scroll track */}
+      <div className="overflow-hidden w-full">
+        <div ref={trackRef} className="flex gap-6 w-max">
+          {doubled.map((t, i) => (
+            <ReviewCard key={i} t={t} />
+          ))}
+        </div>
       </div>
 
-      <div className="mt-12 text-center">
+      <div className="mt-10 text-center">
         <a
           href="https://www.google.com/search?q=Adam+Lester+Realtor+Dalton+Wade+Florida"
           target="_blank"
