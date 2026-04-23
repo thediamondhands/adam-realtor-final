@@ -65,13 +65,19 @@ export default function PropertyDetail() {
 
           {/* CTA */}
           <div className="mt-12 pt-8 border-t structural-rule">
-            <Button
-              onClick={() => setShowingOpen(true)}
-              className="h-14 px-10 bg-foreground text-background hover:bg-foreground/90 font-mono text-xs tracking-[0.2em] uppercase"
-            >
-              Request Private Showing
-              <ArrowRight className="w-4 h-4 ml-3" />
-            </Button>
+            {property.status === "sold" ? (
+              <p className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
+                This property has been sold.
+              </p>
+            ) : (
+              <Button
+                onClick={() => setShowingOpen(true)}
+                className="h-14 px-10 bg-foreground text-background hover:bg-foreground/90 font-mono text-xs tracking-[0.2em] uppercase"
+              >
+                Request Private Showing
+                <ArrowRight className="w-4 h-4 ml-3" />
+              </Button>
+            )}
           </div>
         </div>
       </div>
