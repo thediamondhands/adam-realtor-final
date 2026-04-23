@@ -13,8 +13,8 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async () => {
-    if (!formData.name || !formData.email) {
-      toast.error("Please provide your name and email.");
+    if (!formData.name || !formData.email || !formData.phone) {
+      toast.error("Please provide your name, email, and phone number.");
       return;
     }
     setIsSubmitting(true);
@@ -89,7 +89,7 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
                 />
                 <Input
                   type="tel"
-                  placeholder="Phone (optional)"
+                  placeholder="Phone"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="bg-transparent h-12"
