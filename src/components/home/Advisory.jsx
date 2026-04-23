@@ -21,7 +21,7 @@ export default function Advisory() {
 
             
             <div className="absolute bottom-4 left-4">
-              <p className="font-mono text-[9px] tracking-[0.15em] text-white/50">
+              <p className="font-mono text-[9px] tracking-[0.15em] text-white/50 hidden">
                 THE ADVISORY
               </p>
             </div>
