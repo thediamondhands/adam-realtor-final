@@ -1,0 +1,108 @@
+{
+  "name": "Property",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Property name or headline"
+    },
+    "address": {
+      "type": "string",
+      "description": "Full street address"
+    },
+    "city": {
+      "type": "string",
+      "description": "City name"
+    },
+    "state": {
+      "type": "string",
+      "description": "State abbreviation"
+    },
+    "price": {
+      "type": "number",
+      "description": "Listing price in USD"
+    },
+    "bedrooms": {
+      "type": "number",
+      "description": "Number of bedrooms"
+    },
+    "bathrooms": {
+      "type": "number",
+      "description": "Number of bathrooms"
+    },
+    "sqft": {
+      "type": "number",
+      "description": "Square footage"
+    },
+    "lot_size": {
+      "type": "string",
+      "description": "Lot size description"
+    },
+    "year_built": {
+      "type": "number",
+      "description": "Year the property was built"
+    },
+    "property_type": {
+      "type": "string",
+      "enum": [
+        "single_family",
+        "condo",
+        "townhouse",
+        "penthouse",
+        "estate",
+        "modern_villa"
+      ],
+      "description": "Type of property"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "pending",
+        "sold"
+      ],
+      "default": "available",
+      "description": "Listing status"
+    },
+    "description": {
+      "type": "string",
+      "description": "Full property description and story"
+    },
+    "atmosphere": {
+      "type": "string",
+      "description": "A brief poetic description of the property's soul or atmosphere"
+    },
+    "amenities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of amenities"
+    },
+    "materiality": {
+      "type": "string",
+      "description": "Description of materials - wood, stone, light quality"
+    },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of image URLs"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this property is featured on the homepage"
+    },
+    "coordinates": {
+      "type": "string",
+      "description": "Latitude/Longitude coordinates"
+    }
+  },
+  "required": [
+    "title",
+    "price",
+    "city"
+  ]
+}
