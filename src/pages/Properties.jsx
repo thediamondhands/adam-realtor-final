@@ -54,6 +54,13 @@ export default function Properties() {
                     alt={property.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
+                  {property.status === "available" && (
+                    <div className="absolute top-3 right-3">
+                      <span className="font-mono text-[9px] tracking-[0.2em] uppercase bg-primary/90 text-primary-foreground px-3 py-1">
+                        For Sale
+                      </span>
+                    </div>
+                  )}
                   {property.status === "pending" && (
                     <div className="absolute top-3 right-3">
                       <span className="font-mono text-[9px] tracking-[0.2em] uppercase bg-primary/90 text-primary-foreground px-3 py-1">
