@@ -48,13 +48,13 @@ export default function Navbar() {
             to="/listings"
             className="font-mono text-[11px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity"
           >
-            Listings
+            Current Listings
           </Link>
           <Link
             to="/sold"
             className="font-mono text-[11px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity"
           >
-            Sold
+            Recently Sold
           </Link>
           <Link
             to="/about"
@@ -66,7 +66,7 @@ export default function Navbar() {
             to="/inquiry"
             className="font-mono text-[11px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity"
           >
-            Inquiry
+            Contact Me
           </Link>
         </div>
 
