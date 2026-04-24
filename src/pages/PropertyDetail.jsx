@@ -42,21 +42,24 @@ export default function PropertyDetail() {
     return (
       <div className="h-screen flex flex-col items-center justify-center gap-6 px-[8vw]">
         <h1 className="font-heading text-4xl font-light">Property not found</h1>
-        <Link to="/properties">
+        <Link to="/listings">
           <Button variant="outline" className="font-mono text-xs tracking-[0.2em] uppercase">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portfolio
+            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Listings
           </Button>
         </Link>
       </div>
     );
   }
 
+  const backTo = property.status === "sold" ? "/sold" : "/listings";
+  const backLabel = property.status === "sold" ? "Back to Sold" : "Back to Listings";
+
   return (
     <div className="pt-20">
       {/* Back button */}
       <div className="px-[8vw] py-4">
-        <Link to="/properties" className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors uppercase">
-          <ArrowLeft className="w-4 h-4" /> Back to Portfolio
+        <Link to={backTo} className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors uppercase">
+          <ArrowLeft className="w-4 h-4" /> {backLabel}
         </Link>
       </div>
 

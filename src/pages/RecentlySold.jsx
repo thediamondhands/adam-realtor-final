@@ -1,18 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabaseClient"; // Switched to Supabase
+import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-export default function Properties() {
+export default function RecentlySold() {
   const { data: properties = [], isLoading } = useQuery({
-    queryKey: ["all-properties"],
+    queryKey: ["recently-sold"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('properties')
         .select('*')
-        .order('featured', { ascending: false }) // Featured houses first
-        .order('created_date', { ascending: false }); // Then newest houses
-      
+        .eq('status', 'sold')
+        .order('created_date', { ascending: false });
+
       if (error) throw error;
       return data;
     },
@@ -26,11 +26,9 @@ export default function Properties() {
     return `$${numPrice}`;
   };
 
-  // This cleans up the image links from your CSV
   const getImageUrl = (property) => {
     if (!property.images) return "https://via.placeholder.com/800x1000?text=No+Image";
     try {
-      // If images are stored as a string like '["url"]', parse it
       const imgArray = typeof property.images === 'string' ? JSON.parse(property.images) : property.images;
       return imgArray[0];
     } catch (e) {
@@ -42,10 +40,10 @@ export default function Properties() {
     <div className="pt-28 pb-24 px-[8vw]">
       <div className="mb-16">
         <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-3">
-          Full Collection
+          Proof of Success
         </p>
         <h1 className="font-heading text-5xl md:text-7xl font-light leading-[0.95]">
-          The <span className="italic">Portfolio</span>
+          Recently <span className="italic">Sold</span>
         </h1>
       </div>
 
@@ -57,7 +55,7 @@ export default function Properties() {
         </div>
       ) : properties.length === 0 ? (
         <p className="text-muted-foreground text-center py-20">
-          No properties available at this time. Check back soon.
+          No recently sold properties to show yet.
         </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
@@ -76,20 +74,11 @@ export default function Properties() {
                     alt={property.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  {property.status === "available" && (
-                    <div className="absolute top-3 right-3">
-                      <span className="font-mono text-[9px] tracking-[0.2em] uppercase bg-primary/90 text-primary-foreground px-3 py-1">
-                        For Sale
-                      </span>
-                    </div>
-                  )}
-                  {property.status === "sold" && (
-                    <div className="absolute top-3 right-3">
-                      <span className="font-mono text-[9px] tracking-[0.2em] uppercase bg-foreground/90 text-background px-3 py-1">
-                        Sold
-                      </span>
-                    </div>
-                  )}
+                  <div className="absolute top-3 right-3">
+                    <span className="font-mono text-[9px] tracking-[0.2em] uppercase bg-foreground/90 text-background px-3 py-1">
+                      Sold
+                    </span>
+                  </div>
                 </div>
 
                 <div className="flex items-baseline justify-between mb-2">

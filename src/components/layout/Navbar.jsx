@@ -45,10 +45,16 @@ export default function Navbar() {
             Home
           </Link>
           <Link
-            to="/properties"
+            to="/listings"
             className="font-mono text-[11px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity"
           >
-            Portfolio
+            Listings
+          </Link>
+          <Link
+            to="/sold"
+            className="font-mono text-[11px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity"
+          >
+            Sold
           </Link>
           <Link
             to="/about"
@@ -99,7 +105,8 @@ export default function Navbar() {
             <div className="flex flex-col gap-8">
               {[
                 { to: "/", label: "Home" },
-                { to: "/properties", label: "Portfolio" },
+                { to: "/listings", label: "Listings" },
+                { to: "/sold", label: "Sold" },
                 { to: "/about", label: "About" },
                 { to: "/inquiry", label: "Inquiry" },
               ].map((item, i) => (
