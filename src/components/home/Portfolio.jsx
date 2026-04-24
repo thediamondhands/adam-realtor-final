@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { supabase } from "@/lib/supabaseClient"; // Fixed the filename here
+import { supabase } from "@/lib/supabaseClient"; // Corrected to match your file name
 import { useQuery } from "@tanstack/react-query";
 import PropertyCard from "./PropertyCard";
 
@@ -12,11 +12,11 @@ export default function Portfolio() {
   const { data: properties, error } = useQuery({
     queryKey: ["properties-featured"],
     queryFn: async () => {
-      // Direct Supabase fetch
+      // Direct Supabase fetch using the 'supabase' constant from your client file
       const { data, error } = await supabase
         .from('properties')
         .select('*')
-        .eq('featured', true) // Only grab featured ones for the homepage
+        .eq('featured', true) 
         .order('created_at', { ascending: false })
         .limit(10);
       
@@ -26,9 +26,10 @@ export default function Portfolio() {
     initialData: [],
   });
 
+  // Keep these logs for now so we can verify the data flow in the browser console
   useEffect(() => {
-    if (properties) console.log("New Supabase Data:", properties);
-    if (error) console.error("Supabase Error:", error);
+    if (properties) console.log("Portfolio Data check:", properties);
+    if (error) console.error("Supabase Fetch Error:", error);
   }, [properties, error]);
 
   const handleWheel = (e) => {
@@ -46,7 +47,6 @@ export default function Portfolio() {
 
   const safeProperties = Array.isArray(properties) ? properties : [];
 
-  // We only show the section if we actually have properties to show
   if (safeProperties.length === 0) return null;
 
   return (
