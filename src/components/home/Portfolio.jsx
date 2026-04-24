@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -9,11 +9,24 @@ export default function Portfolio() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  const { data: properties = [] } = useQuery({
+  const { data: properties, error } = useQuery({
     queryKey: ["properties-featured"],
-    queryFn: () => base44.entities.Property.list("-created_date", 10),
+    queryFn: async () => {
+      const result = await base44.entities.Property.list("-created_date", 10);
+      return result;
+    },
     initialData: [],
   });
+
+  // This log will tell us exactly why 'a.map' was failing
+  useEffect(() => {
+    if (properties) {
+      console.log("Portfolio Data check:", properties);
+    }
+    if (error) {
+      console.error("Supabase Fetch Error:", error);
+    }
+  }, [properties, error]);
 
   const handleWheel = (e) => {
     if (!scrollRef.current || !isHovered) return;
@@ -28,7 +41,10 @@ export default function Portfolio() {
     setScrollProgress(Math.max(0, Math.min(1, progress)));
   };
 
-  if (properties.length === 0) return null;
+  // If properties is null or not an array, we treat it as empty to avoid the crash
+  const safeProperties = Array.isArray(properties) ? properties : [];
+
+  if (safeProperties.length === 0) return null;
 
   return (
     <section className="py-16">
@@ -47,7 +63,7 @@ export default function Portfolio() {
           </div>
           <div className="hidden md:block">
             <p className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground text-right">
-              {String(Math.round(scrollProgress * (properties.length - 1)) + 1).padStart(2, "0")} // {String(properties.length).padStart(2, "0")}
+              {String(Math.round(scrollProgress * (safeProperties.length - 1)) + 1).padStart(2, "0")} / {String(safeProperties.length).padStart(2, "0")}
             </p>
             <div className="w-32 h-px bg-border mt-3 relative">
               <motion.div
@@ -60,7 +76,7 @@ export default function Portfolio() {
         <div className="w-full h-px structural-rule border-t mt-8" />
       </div>
 
-      {/* Horizontal scroll container — scrolls on hover via mouse wheel */}
+      {/* Horizontal scroll container */}
       <div
         ref={scrollRef}
         onWheel={handleWheel}
@@ -69,10 +85,12 @@ export default function Portfolio() {
         onMouseLeave={() => setIsHovered(false)}
         className="horizontal-scroll-section flex gap-6 md:gap-10 px-[8vw] overflow-x-scroll pt-6 pb-10 cursor-grab"
       >
-        {properties.map((property, index) => (
-          <PropertyCard key={property.id} property={property} index={index} />
+        {/* THE FIX: We use safeProperties here to prevent the .map crash */}
+        {safeProperties.map((property, index) => (
+          <PropertyCard key={property.id || index} property={property} index={index} />
         ))}
       </div>
+      
       {isHovered && (
         <p className="text-center font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase mt-2">
           Scroll to browse
