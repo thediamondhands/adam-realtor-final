@@ -41,9 +41,6 @@ export default function Footer() {
         <p className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground">
           © {new Date().getFullYear()} ADAM LESTER REALTOR®. ALL RIGHTS RESERVED.
         </p>
-        <p className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground">
-          MIDWEST FLORIDA'S COASTAL REAL ESTATE EXPERT
-        </p>
       </div>
     </footer>
   );
