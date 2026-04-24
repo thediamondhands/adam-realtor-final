@@ -44,7 +44,7 @@ export default function Portfolio() {
         <div className="px-[8vw]">
           <div className="mb-8">
             <h2 className="font-heading text-4xl md:text-5xl font-light text-foreground">
-              Current<span className="italic">Listings</span>
+              Current <span className="italic">Listings</span>
             </h2>
             <div className="w-full h-px border-t mt-8" />
           </div>
