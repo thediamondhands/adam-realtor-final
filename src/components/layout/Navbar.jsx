@@ -33,7 +33,7 @@ export default function Navbar() {
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className={`fixed top-0 left-0 right-0 z-50 px-[8vw] py-6 flex items-center justify-between transition-colors duration-500 ${isHome ? "text-white" : "text-foreground bg-background/80 backdrop-blur-md border-b structural-rule"}`}>
         <Link to="/" className="font-heading text-2xl tracking-wide flex items-center gap-2">
-          Adam Lester Realtor®
+          Adam Lester, Realtor®
         </Link>
 
         {/* Desktop Nav */}
@@ -91,7 +91,7 @@ export default function Navbar() {
           >
             <div className="flex items-center justify-between mb-16">
               <Link to="/" className="font-heading text-2xl text-foreground" onClick={() => setMobileOpen(false)}>
-                Adam Lester Realtor®
+                Adam Lester, Realtor®
               </Link>
               <button
                 onClick={() => setMobileOpen(false)}
