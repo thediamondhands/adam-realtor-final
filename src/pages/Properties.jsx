@@ -10,7 +10,8 @@ export default function Properties() {
       const { data, error } = await supabase
         .from('properties')
         .select('*')
-        .order('created_date', { ascending: false });
+        .order('featured', { ascending: false }) // Featured houses first
+        .order('created_date', { ascending: false }); // Then newest houses
       
       if (error) throw error;
       return data;
