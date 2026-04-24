@@ -18,6 +18,7 @@ export default function Footer() {
           <div className="flex flex-col gap-3">
             <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-sm text-foreground hover:text-primary transition-colors">Home</Link>
             <Link to="/properties" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-sm text-foreground hover:text-primary transition-colors">Portfolio</Link>
+            <Link to="/about" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-sm text-foreground hover:text-primary transition-colors">About</Link>
             <Link to="/inquiry" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-sm text-foreground hover:text-primary transition-colors">Inquiry</Link>
           </div>
         </div>

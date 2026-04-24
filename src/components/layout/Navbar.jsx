@@ -51,6 +51,12 @@ export default function Navbar() {
             Portfolio
           </Link>
           <Link
+            to="/about"
+            className="font-mono text-[11px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity"
+          >
+            About
+          </Link>
+          <Link
             to="/inquiry"
             className="font-mono text-[11px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity"
           >
@@ -94,6 +100,7 @@ export default function Navbar() {
               {[
                 { to: "/", label: "Home" },
                 { to: "/properties", label: "Portfolio" },
+                { to: "/about", label: "About" },
                 { to: "/inquiry", label: "Inquiry" },
               ].map((item, i) => (
                 <motion.div
