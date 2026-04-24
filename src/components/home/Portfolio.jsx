@@ -43,11 +43,8 @@ export default function Portfolio() {
       {featuredListings.length > 0 && (
         <div className="px-[8vw]">
           <div className="mb-8">
-            <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-3">
-              Featured Listings
-            </p>
             <h2 className="font-heading text-4xl md:text-6xl lg:text-7xl font-light text-foreground leading-[0.95]">
-              Florida<br /><span className="italic">Listings</span>
+              Current<br /><span className="italic">Listings</span>
             </h2>
             <div className="w-full h-px border-t mt-8" />
           </div>
@@ -64,9 +61,6 @@ export default function Portfolio() {
       {soldListings.length > 0 && (
         <div>
           <div className="px-[8vw] mb-8">
-            <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-3">
-              Proof of Success
-            </p>
             <h2 className="font-heading text-4xl md:text-5xl font-light text-foreground">
               Recently <span className="italic">Sold</span>
             </h2>
