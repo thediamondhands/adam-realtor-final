@@ -8,8 +8,8 @@ export default function Home() {
   return (
     <div>
       <Hero />
-      <Portfolio />
       <Advisory />
+      <Portfolio />
       <Testimonials />
       <div id="discovery">
         <DiscoveryQuestionnaire />
