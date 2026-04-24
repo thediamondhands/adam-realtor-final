@@ -14,24 +14,18 @@ export default function Portfolio() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('properties')
-        .select('*'); 
-      
-      // If you want to sort, ensure it is exactly 'created_at'
-      // .order('created_at', { ascending: false });
+        .select('*')
+        .order('created_date', { ascending: false }); // Added sorting here for you
 
       if (error) throw error;
       return data;
     }
   });
 
-// Add this right after the useQuery block
-const featuredListings = properties?.filter(p => p.status === "available") || [];
-const soldListings = properties?.filter(p => p.status === "sold") || [];
+  // Data Filtering
+  const featuredListings = properties?.filter(p => p.status === "available") || [];
+  const soldListings = properties?.filter(p => p.status === "sold") || [];
   
-  useEffect(() => {
-    if (properties) console.log("Homes found in DB:", properties.length);
-  }, [properties]);
-
   const handleWheel = (e) => {
     if (!scrollRef.current || !isHovered) return;
     const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
@@ -41,13 +35,11 @@ const soldListings = properties?.filter(p => p.status === "sold") || [];
   };
 
   if (isLoading) return <div className="py-20 text-center text-muted-foreground animate-pulse">Loading listings...</div>;
-  
-  // If we still get 0, the section stays hidden to keep the site looking clean
   if (!properties || properties.length === 0) return null;
 
   return (
     <section className="py-16 space-y-24">
-      {/* 1. FEATURED LISTINGS: Using a Grid for a "Spotlight" look */}
+      {/* 1. FEATURED LISTINGS */}
       {featuredListings.length > 0 && (
         <div className="px-[8vw]">
           <div className="mb-8">
@@ -68,7 +60,7 @@ const soldListings = properties?.filter(p => p.status === "sold") || [];
         </div>
       )}
 
-      {/* 2. PROOF OF SUCCESS: Using your Horizontal Scroll for Sold homes */}
+      {/* 2. PROOF OF SUCCESS */}
       {soldListings.length > 0 && (
         <div>
           <div className="px-[8vw] mb-8">
@@ -94,20 +86,6 @@ const soldListings = properties?.filter(p => p.status === "sold") || [];
           </div>
         </div>
       )}
-    </section>
-  );
-
-      <div
-        ref={scrollRef}
-        onWheel={handleWheel}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        className="horizontal-scroll-section flex gap-6 md:gap-10 px-[8vw] overflow-x-scroll pt-6 pb-10 cursor-grab"
-      >
-        {properties.map((property, index) => (
-          <PropertyCard key={property.id} property={property} index={index} />
-        ))}
-      </div>
     </section>
   );
 }
