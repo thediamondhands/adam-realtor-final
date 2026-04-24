@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { supabase } from "@/lib/supabase"; // Swapping base44 for supabase
+import { supabase } from "@/lib/supabaseClient"; // Fixed the filename here
 import { useQuery } from "@tanstack/react-query";
 import PropertyCard from "./PropertyCard";
 
