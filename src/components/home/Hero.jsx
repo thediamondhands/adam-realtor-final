@@ -25,7 +25,7 @@ export default function Hero() {
 
           </p>
           <h1 className="font-heading text-white text-5xl md:text-7xl lg:text-[8vw] leading-[0.9] font-light max-w-[80vw]">
-            Adam Lester
+            Adam Lester,
             <br />
             <span className="italic font-light">Realtor®</span>
           </h1>
