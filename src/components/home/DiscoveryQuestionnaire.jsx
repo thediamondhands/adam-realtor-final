@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { base44 } from "@/api/base44Client";
+// 1. Import your Supabase client instead of base44
+import { supabase } from "@/lib/supabase"; 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -17,16 +18,32 @@ export default function DiscoveryQuestionnaire() {
       toast.error("Please provide your name and phone number.");
       return;
     }
+
     setIsSubmitting(true);
-    await base44.entities.Inquiry.create({
-      name: form.name,
-      phone: form.phone,
-      message: form.needs,
-      type: "general",
-    });
+
+    // 2. Replace base44.entities with Supabase syntax
+    const { error } = await supabase
+      .from('inquiries') // Ensure this matches your Supabase table name
+      .insert([
+        { 
+          name: form.name, 
+          phone: form.phone, 
+          message: form.needs, 
+          type: "general" 
+        }
+      ]);
+
     setIsSubmitting(false);
-    setIsSubmitted(true);
+
+    if (error) {
+      console.error("Error submitting inquiry:", error);
+      toast.error("Something went wrong. Please try again.");
+    } else {
+      setIsSubmitted(true);
+    }
   };
+
+  // ... (rest of your component remains the same)
 
   if (isSubmitted) {
     return (
