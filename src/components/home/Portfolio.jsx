@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { supabase } from "@/lib/supabaseClient"; // Corrected to match your file name
+import { supabase } from "@/lib/supabaseClient"; 
 import { useQuery } from "@tanstack/react-query";
 import PropertyCard from "./PropertyCard";
 
@@ -12,24 +12,27 @@ export default function Portfolio() {
   const { data: properties, error } = useQuery({
     queryKey: ["properties-featured"],
     queryFn: async () => {
-      // Direct Supabase fetch using the 'supabase' constant from your client file
+      // Direct Supabase fetch
       const { data, error } = await supabase
         .from('properties')
         .select('*')
-        .eq('featured', true) 
+        // We removed the 'featured' filter for now to ensure data is flowing
         .order('created_at', { ascending: false })
         .limit(10);
       
-      if (error) throw error;
+      if (error) {
+        console.error("Query Function Error:", error);
+        throw error;
+      }
       return data;
     },
     initialData: [],
   });
 
-  // Keep these logs for now so we can verify the data flow in the browser console
+  // Verification Logs
   useEffect(() => {
-    if (properties) console.log("Portfolio Data check:", properties);
-    if (error) console.error("Supabase Fetch Error:", error);
+    console.log("Current properties state:", properties);
+    if (error) console.error("Portfolio Fetch Error:", error);
   }, [properties, error]);
 
   const handleWheel = (e) => {
@@ -37,20 +40,27 @@ export default function Portfolio() {
     const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
     const atStart = scrollRef.current.scrollLeft === 0 && e.deltaY < 0;
     const atEnd = scrollRef.current.scrollLeft >= maxScroll && e.deltaY > 0;
+    
     if (!atStart && !atEnd) {
       e.preventDefault();
     }
+    
     scrollRef.current.scrollLeft += e.deltaY;
     const progress = scrollRef.current.scrollLeft / maxScroll;
-    setScrollProgress(Math.max(0, Math.min(1, progress)));
+    setScrollProgress(Math.max(0, Math.min(1, progress || 0)));
   };
 
+  // Safety check to prevent .map crashes
   const safeProperties = Array.isArray(properties) ? properties : [];
 
+  // If this stays empty, the section won't show. 
+  // If your console says "Array(0)", it means the table name 'properties' 
+  // might have a typo or the table is empty in Supabase.
   if (safeProperties.length === 0) return null;
 
   return (
     <section className="py-16">
+      {/* Header */}
       <div className="px-[8vw] pb-8">
         <div className="flex items-end justify-between">
           <div>
@@ -78,6 +88,7 @@ export default function Portfolio() {
         <div className="w-full h-px structural-rule border-t mt-8" />
       </div>
 
+      {/* Horizontal scroll container */}
       <div
         ref={scrollRef}
         onWheel={handleWheel}
