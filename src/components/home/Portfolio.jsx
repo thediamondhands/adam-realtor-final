@@ -43,7 +43,7 @@ export default function Portfolio() {
       {featuredListings.length > 0 && (
         <div className="px-[8vw]">
           <div className="mb-8">
-            <h2 className="font-heading text-4xl md:text-6xl lg:text-7xl font-light text-foreground leading-[0.95]">
+            <h2 className="font-heading text-4xl md:text-5xl font-light text-foreground">
               Current<br /><span className="italic">Listings</span>
             </h2>
             <div className="w-full h-px border-t mt-8" />
