@@ -66,7 +66,7 @@ export default function Navbar() {
             to="/inquiry"
             className="font-mono text-[11px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity"
           >
-            Contact Me
+            Contact Us
           </Link>
         </div>
 
@@ -105,10 +105,10 @@ export default function Navbar() {
             <div className="flex flex-col gap-8">
               {[
                 { to: "/", label: "Home" },
-                { to: "/listings", label: "Listings" },
-                { to: "/sold", label: "Sold" },
+                { to: "/listings", label: "Current Listings" },
+                { to: "/sold", label: "Recently Sold" },
                 { to: "/about", label: "About" },
-                { to: "/inquiry", label: "Inquiry" },
+                { to: "/inquiry", label: "Contact Us" },
               ].map((item, i) => (
                 <motion.div
                   key={item.to}
