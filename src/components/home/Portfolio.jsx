@@ -12,12 +12,13 @@ export default function Portfolio() {
   const { data: properties, error, isLoading } = useQuery({
     queryKey: ["properties-home"],
     queryFn: async () => {
-      // Fetching all rows now that RLS is open
       const { data, error } = await supabase
         .from('properties')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select('*'); 
       
+      // If you want to sort, ensure it is exactly 'created_at'
+      // .order('created_at', { ascending: false });
+
       if (error) throw error;
       return data;
     }
