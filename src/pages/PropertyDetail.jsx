@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/lib/supabaseClient";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -16,11 +16,19 @@ export default function PropertyDetail() {
   const propertyId = pathParts[pathParts.length - 1];
 
   const { data: property, isLoading } = useQuery({
-    queryKey: ["property", propertyId],
-    queryFn: () => base44.entities.Property.filter({ id: propertyId }),
-    select: (data) => data?.[0],
-    enabled: !!propertyId,
-  });
+  queryKey: ["property", propertyId],
+  queryFn: async () => {
+    const { data, error } = await supabase
+      .from('properties')
+      .select('*')
+      .eq('id', propertyId)
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+  enabled: !!propertyId,
+});
 
   if (isLoading) {
     return (
