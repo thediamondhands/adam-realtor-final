@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/lib/supabase"; // Swapping base44 for supabase
 import { useQuery } from "@tanstack/react-query";
 import PropertyCard from "./PropertyCard";
 
@@ -12,20 +12,23 @@ export default function Portfolio() {
   const { data: properties, error } = useQuery({
     queryKey: ["properties-featured"],
     queryFn: async () => {
-      const result = await base44.entities.Property.list("-created_date", 10);
-      return result;
+      // Direct Supabase fetch
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('featured', true) // Only grab featured ones for the homepage
+        .order('created_at', { ascending: false })
+        .limit(10);
+      
+      if (error) throw error;
+      return data;
     },
     initialData: [],
   });
 
-  // This log will tell us exactly why 'a.map' was failing
   useEffect(() => {
-    if (properties) {
-      console.log("Portfolio Data check:", properties);
-    }
-    if (error) {
-      console.error("Supabase Fetch Error:", error);
-    }
+    if (properties) console.log("New Supabase Data:", properties);
+    if (error) console.error("Supabase Error:", error);
   }, [properties, error]);
 
   const handleWheel = (e) => {
@@ -41,14 +44,13 @@ export default function Portfolio() {
     setScrollProgress(Math.max(0, Math.min(1, progress)));
   };
 
-  // If properties is null or not an array, we treat it as empty to avoid the crash
   const safeProperties = Array.isArray(properties) ? properties : [];
 
+  // We only show the section if we actually have properties to show
   if (safeProperties.length === 0) return null;
 
   return (
     <section className="py-16">
-      {/* Header */}
       <div className="px-[8vw] pb-8">
         <div className="flex items-end justify-between">
           <div>
@@ -76,7 +78,6 @@ export default function Portfolio() {
         <div className="w-full h-px structural-rule border-t mt-8" />
       </div>
 
-      {/* Horizontal scroll container */}
       <div
         ref={scrollRef}
         onWheel={handleWheel}
@@ -85,7 +86,6 @@ export default function Portfolio() {
         onMouseLeave={() => setIsHovered(false)}
         className="horizontal-scroll-section flex gap-6 md:gap-10 px-[8vw] overflow-x-scroll pt-6 pb-10 cursor-grab"
       >
-        {/* THE FIX: We use safeProperties here to prevent the .map crash */}
         {safeProperties.map((property, index) => (
           <PropertyCard key={property.id || index} property={property} index={index} />
         ))}
