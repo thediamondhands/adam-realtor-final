@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-// 1. Import your Supabase client instead of base44
 import { supabase } from "@/lib/supabaseClient";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,20 +9,28 @@ import { toast } from "sonner";
 
 export default function DiscoveryQuestionnaire() {
   const [form, setForm] = useState({ needs: "", name: "", phone: "" });
+  const [errors, setErrors] = useState({ name: false, phone: false });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async () => {
+    // Reset errors at the start of submission
+    setErrors({ name: false, phone: false });
+
+    // Validate fields and set error states
     if (!form.name || !form.phone) {
+      setErrors({
+        name: !form.name,
+        phone: !form.phone
+      });
       toast.error("Please provide your name and phone number.");
       return;
     }
 
     setIsSubmitting(true);
 
-    // 2. Replace base44.entities with Supabase syntax
     const { error } = await supabase
-      .from('inquiries') // Ensure this matches your Supabase table name
+      .from('inquiries')
       .insert([
         { 
           name: form.name, 
@@ -42,8 +49,6 @@ export default function DiscoveryQuestionnaire() {
       setIsSubmitted(true);
     }
   };
-
-  // ... (rest of your component remains the same)
 
   if (isSubmitted) {
     return (
@@ -93,25 +98,35 @@ export default function DiscoveryQuestionnaire() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase mb-2 block">
+              <label className={`font-mono text-[10px] tracking-[0.2em] uppercase mb-2 block ${errors.name ? "text-red-500" : "text-muted-foreground"}`}>
                 Name *
               </label>
               <Input
                 placeholder="Your name"
                 value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="bg-transparent border-border h-12 font-body text-base"
+                onChange={(e) => {
+                  setForm({ ...form, name: e.target.value });
+                  if (e.target.value) setErrors(prev => ({ ...prev, name: false }));
+                }}
+                className={`bg-transparent h-12 font-body text-base transition-colors ${
+                  errors.name ? "border-red-500 focus-visible:ring-red-500" : "border-border"
+                }`}
               />
             </div>
             <div>
-              <label className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase mb-2 block">
+              <label className={`font-mono text-[10px] tracking-[0.2em] uppercase mb-2 block ${errors.phone ? "text-red-500" : "text-muted-foreground"}`}>
                 Phone Number *
               </label>
               <Input
                 placeholder="Your phone number"
                 value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="bg-transparent border-border h-12 font-body text-base"
+                onChange={(e) => {
+                  setForm({ ...form, phone: e.target.value });
+                  if (e.target.value) setErrors(prev => ({ ...prev, phone: false }));
+                }}
+                className={`bg-transparent h-12 font-body text-base transition-colors ${
+                  errors.phone ? "border-red-500 focus-visible:ring-red-500" : "border-border"
+                }`}
               />
             </div>
           </div>
