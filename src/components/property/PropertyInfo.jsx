@@ -17,26 +17,28 @@ export default function PropertyInfo({ property }) {
       transition={{ duration: 0.6 }}
       className="space-y-10"
     >
-      {/* Header */}
-      <div>
-        <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-3">
-          {property.property_type?.replace(/_/g, " ") || "Residence"}
-        </p>
-        <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-light leading-[0.95] mb-4">
-          {property.title}
-        </h1>
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <MapPin className="w-4 h-4" />
-          <span className="text-sm">{property.address || `${property.city}, ${property.state}`}</span>
-        </div>
-      </div>
+      {/* Header - Updated for property.location */}
+<div>
+  <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-3">
+    {property.property_type?.replace(/_/g, " ") || "Residence"}
+  </p>
+  <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-light leading-[0.95] mb-4">
+    {property.title}
+  </h1>
+  <div className="flex items-center gap-2 text-muted-foreground">
+    <MapPin className="w-4 h-4" />
+    {/* Uses property.location from your DB instead of city/state */}
+    <span className="text-sm">{property.address || property.location || "Florida"}</span>
+  </div>
+</div>
 
-      {/* Price */}
-      <div className="border-t border-b structural-rule py-6">
-        <p className="font-heading text-3xl md:text-4xl font-light">
-          {formatPrice(property.price)}
-        </p>
-      </div>
+{/* Price - Updated for property.listing_price */}
+<div className="border-t border-b structural-rule py-6">
+  <p className="font-heading text-3xl md:text-4xl font-light">
+    {/* formatPrice now receives listing_price */}
+    {formatPrice(property.listing_price || 0)}
+  </p>
+</div>
 
       {/* Specs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
