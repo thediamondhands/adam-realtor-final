@@ -33,29 +33,42 @@ export default function PropertyDetail() {
   // Fetch images from Supabase Storage based on the property slug
   useEffect(() => {
     async function fetchImages() {
-      if (property?.slug) {
-        const { data: files, error } = await supabase
-          .storage
-          .from('properties')
-          .list(property.slug);
+      if (!property?.slug) return;
 
-        if (error) {
-          console.error("Error fetching images:", error);
-          return;
-        }
+      console.log("🔍 Fetching images for folder:", property.slug);
 
-        // Generate public URLs for every file found in the folder
-        const urls = files
-          .filter(file => file.name !== '.emptyFolderPlaceholder')
-          .map(file => 
-            `https://lvuqqlvbuspfkakzxrsi.supabase.co/storage/v1/object/public/properties/${property.slug}/${file.name}`
-          );
+      const { data: files, error } = await supabase
+        .storage
+        .from('properties')
+        .list(property.slug, {
+          limit: 100,
+          offset: 0,
+          sortBy: { column: 'name', order: 'asc' }
+        });
+
+      if (error) {
+        console.error("❌ Error fetching images:", error);
         
-        setImageUrls(urls);
+        // Graceful fallback - at least show the first image
+        const fallbackUrl = `https://lvuqqlvbuspfkakzxrsi.supabase.co/storage/v1/object/public/properties/${property.slug}/image1.jpg`;
+        console.log("⚠️ Using fallback image:", fallbackUrl);
+        setImageUrls([fallbackUrl]);
+        return;
       }
+
+      // Generate public URLs for every file found in the folder
+      const urls = files
+        .filter(file => !file.name.startsWith('.')) // Remove hidden files like .emptyFolderPlaceholder
+        .map(file => 
+          `https://lvuqqlvbuspfkakzxrsi.supabase.co/storage/v1/object/public/properties/${property.slug}/${file.name}`
+        );
+
+      console.log(`✅ Successfully loaded ${urls.length} images for ${property.slug}`);
+      setImageUrls(urls);
     }
+
     fetchImages();
-  }, [property]);
+  }, [property?.slug]); // Fixed dependency array
 
   if (isLoading) {
     return (
@@ -91,7 +104,6 @@ export default function PropertyDetail() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         <div className="h-[60vh] lg:h-auto">
-          {/* We now pass the dynamic imageUrls array instead of property.images */}
           <PropertyGallery images={imageUrls} />
         </div>
 
