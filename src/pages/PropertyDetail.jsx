@@ -11,21 +11,25 @@ import ShowingRequest from "../components/property/ShowingRequest";
 export default function PropertyDetail() {
   const [showingOpen, setShowingOpen] = useState(false);
 
-  const urlParams = new URLSearchParams(window.location.search);
+  // Get the slug from the URL path
   const pathParts = window.location.pathname.split("/");
   const slug = pathParts[pathParts.length - 1];
 
-  const { data, error } = await supabase
-  .from('properties')
-  .select('*')
-  .eq('slug', slug) // Change 'id' to 'slug'
-  .single();
-    
-    if (error) throw error;
-    return data;
-  },
-  enabled: !!propertyId,
-});
+  const { data: property, isLoading } = useQuery({
+    queryKey: ["property", slug],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('slug', slug) // Use the slug column here
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!slug,
+  });
+  // ... rest of the file
 
   if (isLoading) {
     return (
