@@ -20,7 +20,7 @@ export default function Footer() {
             <Link to="/listings" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-sm text-foreground hover:text-primary transition-colors">Current Listings</Link>
             <Link to="/sold" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-sm text-foreground hover:text-primary transition-colors">Recently Sold</Link>
             <Link to="/about" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-sm text-foreground hover:text-primary transition-colors">About</Link>
-            <Link to="/inquiry" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-sm text-foreground hover:text-primary transition-colors">Contact Us</Link>
+            <Link to="/inquiry" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-sm text-foreground hover:text-primary transition-colors">Contact Me</Link>
           </div>
         </div>
 
