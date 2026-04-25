@@ -3,11 +3,13 @@ import { MapPin, Maximize, BedDouble, Bath, Calendar, ExternalLink } from "lucid
 
 export default function PropertyInfo({ property }) {
   const formatPrice = (price) => {
+    const numPrice = Number(price || property.price || property.listing_price || 0);
+    
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 0,
-    }).format(price || property.listing_price || 0);
+    }).format(numPrice);
   };
 
   const encodedAddress = encodeURIComponent(property.title || "");
@@ -31,14 +33,14 @@ export default function PropertyInfo({ property }) {
         </h1>
         <div className="flex items-center gap-2 text-muted-foreground">
           <MapPin className="w-4 h-4" />
-          <span className="text-sm">{property.location || "Location not specified"}</span>
+          <span className="text-sm">{property.location || property.address || "Location not specified"}</span>
         </div>
       </div>
 
-      {/* Price */}
+      {/* Price - Fixed */}
       <div className="border-t border-b structural-rule py-6">
         <p className="font-heading text-3xl md:text-4xl font-light">
-          {formatPrice(property.listing_price)}
+          {formatPrice(property.price)}
         </p>
       </div>
 
@@ -47,7 +49,7 @@ export default function PropertyInfo({ property }) {
         {[
           { icon: BedDouble, label: "Bedrooms", value: property.bedrooms },
           { icon: Bath, label: "Bathrooms", value: property.bathrooms },
-          { icon: Maximize, label: "Sq. Ft.", value: property.sq_ft?.toLocaleString() },
+          { icon: Maximize, label: "Sq. Ft.", value: property.sq_ft || property.sqft },
           { icon: Calendar, label: "Year Built", value: property.year_built },
         ].map(({ icon: Icon, label, value }) => (
           value && (
