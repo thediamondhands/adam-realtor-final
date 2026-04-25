@@ -30,11 +30,10 @@ export default function PropertyDetail() {
     enabled: !!slug,
   });
 
-  // This effect runs once we have the property data
+  // Fetch images from Supabase Storage based on the property slug
   useEffect(() => {
     async function fetchImages() {
       if (property?.slug) {
-        // Look inside the folder matching the slug
         const { data: files, error } = await supabase
           .storage
           .from('properties')
@@ -45,10 +44,13 @@ export default function PropertyDetail() {
           return;
         }
 
-        // Create a URL for every file found in that folder
-        const urls = files.map(file => 
-          `https://lvuqqlvbuspfkakzxrsi.supabase.co/storage/v1/object/public/properties/${property.slug}/${file.name}`
-        );
+        // Generate public URLs for every file found in the folder
+        const urls = files
+          .filter(file => file.name !== '.emptyFolderPlaceholder')
+          .map(file => 
+            `https://lvuqqlvbuspfkakzxrsi.supabase.co/storage/v1/object/public/properties/${property.slug}/${file.name}`
+          );
+        
         setImageUrls(urls);
       }
     }
@@ -89,7 +91,7 @@ export default function PropertyDetail() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         <div className="h-[60vh] lg:h-auto">
-          {/* This now uses the exact number of images found in your bucket */}
+          {/* We now pass the dynamic imageUrls array instead of property.images */}
           <PropertyGallery images={imageUrls} />
         </div>
 
