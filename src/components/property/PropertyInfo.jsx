@@ -1,21 +1,24 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Maximize, BedDouble, Bath, Calendar, ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { MapPin, Maximize, BedDouble, Bath, Calendar, ExternalLink, X } from "lucide-react";
 
-export default function PropertyInfo({ property }) {
-  const [selectedImage, setSelectedImage] = useState(null);
+export default function PropertyInfo({ property, activeImage }) {
+  // This state will track if the user has clicked the image to focus it
+  const [isMaximized, setIsMaximized] = useState(false);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 0,
-    }).format(price || 0);
+    }).format(price || property.price || 0);
   };
 
   const encodedAddress = encodeURIComponent(property.title || "");
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
-  const simpleEmbed = `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodedAddress}`;
+  
+  // FIX: This specific URL format works for iframes without an API key
+  const embedUrl = `https://maps.google.com/maps?q=${encodedAddress}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
 
   return (
     <>
@@ -49,19 +52,21 @@ export default function PropertyInfo({ property }) {
         {/* Price Section */}
         <div className="border-t border-b structural-rule py-6">
           <p className="font-heading text-3xl md:text-4xl font-light">
-            {formatPrice(property.price)}
+            {formatPrice(property.listing_price)}
           </p>
         </div>
 
-        {/* Image Interaction Note: In your parent component where you render the image slider, 
-            pass a function like onClick={() => setSelectedImage(clickedImageUrl)} to each image. */}
+        {/* Click Instruction for the user */}
+        <p className="text-[10px] font-mono uppercase text-muted-foreground italic">
+          Tip: Click the property photo to expand
+        </p>
 
         {/* Specs Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
             { icon: BedDouble, label: "Bedrooms", value: property.bedrooms },
             { icon: Bath, label: "Bathrooms", value: property.bathrooms },
-            { icon: Maximize, label: "Sq. Ft.", value: property.sqft?.toLocaleString() },
+            { icon: Maximize, label: "Sq. Ft.", value: (property.sq_ft || property.sqft)?.toLocaleString() },
             { icon: Calendar, label: "Year Built", value: property.year_built },
           ].map(({ icon: Icon, label, value }) => (
             value && (
@@ -86,7 +91,7 @@ export default function PropertyInfo({ property }) {
           </div>
         )}
 
-        {/* Map Section */}
+        {/* Map Section - FIXED URL */}
         <div className="space-y-4 pt-4 border-t">
           <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
             Location
@@ -96,7 +101,7 @@ export default function PropertyInfo({ property }) {
               width="100%"
               height="100%"
               style={{ border: 0 }}
-              src={simpleEmbed}
+              src={embedUrl}
               allowFullScreen
               loading="lazy"
             ></iframe>
@@ -104,31 +109,23 @@ export default function PropertyInfo({ property }) {
         </div>
       </motion.div>
 
-      {/* FULL SCREEN FOCUS MODAL */}
+      {/* FULL SCREEN FOCUS MODAL (Add onClick={() => setIsMaximized(true)} to your main image slider) */}
       <AnimatePresence>
-        {selectedImage && (
+        {isMaximized && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-10"
-            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/95 p-4 md:p-10 cursor-zoom-out"
+            onClick={() => setIsMaximized(false)}
           >
-            <button 
-              className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors"
-              onClick={() => setSelectedImage(null)}
-            >
+            <button className="absolute top-6 right-6 text-white/70 hover:text-white">
               <X className="w-8 h-8" />
             </button>
-
-            <motion.img
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              src={selectedImage}
-              alt="Focused Property View"
-              className="max-w-full max-h-full object-contain shadow-2xl"
-              onClick={(e) => e.stopPropagation()} // Prevents closing when clicking the image itself
+            <img
+              src={activeImage}
+              alt="Property Detail"
+              className="max-w-full max-h-full object-contain"
             />
           </motion.div>
         )}
