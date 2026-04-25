@@ -26,14 +26,14 @@ export default function RecentlySold() {
     return `$${numPrice}`;
   };
 
-  // New simplified function
-const getImageUrl = (property) => {
-  const projectId = "lvuqqlvbuspfkakzxrsi";
-  const bucketUrl = `https://${projectId}.supabase.co/storage/v1/object/public/properties`;
+  const getImageUrl = (property) => {
+    const projectId = "lvuqqlvbuspfkakzxrsi"; 
+    const bucketUrl = `https://${projectId}.supabase.co/storage/v1/object/public/properties`;
   
-  // Use the specific filename stored in your database
-  return `${bucketUrl}/${property.slug}/${property.thumbnail_filename}`;
-};
+  // Now it pulls the correct extension for every specific property
+    const fileName = property.thumbnail_url || 'image1.jpg'; // fallback just in case
+    return `${bucketUrl}/${property.slug}/${fileName}`;
+  };
 
   return (
     <div className="pt-28 pb-24 px-[8vw]">
