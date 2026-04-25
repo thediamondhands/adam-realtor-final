@@ -66,7 +66,7 @@ export default function Navbar() {
             to="/inquiry"
             className="font-mono text-[11px] tracking-[0.2em] uppercase hover:opacity-60 transition-opacity"
           >
-            Contact Us
+            Contact Me
           </Link>
         </div>
 
@@ -108,7 +108,7 @@ export default function Navbar() {
                 { to: "/listings", label: "Current Listings" },
                 { to: "/sold", label: "Recently Sold" },
                 { to: "/about", label: "About" },
-                { to: "/inquiry", label: "Contact Us" },
+                { to: "/inquiry", label: "Contact Me" },
               ].map((item, i) => (
                 <motion.div
                   key={item.to}
