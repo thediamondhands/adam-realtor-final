@@ -15,15 +15,16 @@ export default function PropertyGallery({ images = [] }) {
   const allImages = images.length > 0 ? images : fallbackImages;
 
   const nextImage = (e) => {
-    e?.stopPropagation();
+    if (e) e.stopPropagation();
     setActiveIndex((prev) => (prev < allImages.length - 1 ? prev + 1 : 0));
   };
 
   const prevImage = (e) => {
-    e?.stopPropagation();
+    if (e) e.stopPropagation();
     setActiveIndex((prev) => (prev > 0 ? prev - 1 : allImages.length - 1));
   };
 
+  // Enable arrow key navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!isMaximized) return;
@@ -51,75 +52,67 @@ export default function PropertyGallery({ images = [] }) {
             onClick={() => setIsMaximized(true)}
           />
 
-          {allImages.length > 1 && (
-            <>
-              <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-background/60 backdrop-blur-md hover:bg-background transition-all opacity-0 group-hover:opacity-100 z-10">
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-              <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-background/60 backdrop-blur-md hover:bg-background transition-all opacity-0 group-hover:opacity-100 z-10">
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </>
-          )}
-
-          <div className="absolute bottom-6 right-6 z-10">
-            <p className="font-mono text-[10px] tracking-[0.2em] text-white bg-black/40 px-4 py-2 backdrop-blur-md rounded-full">
-              {String(activeIndex + 1).padStart(2, "0")} / {String(allImages.length).padStart(2, "0")}
-            </p>
-          </div>
+          {/* Regular View Arrows */}
+          <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-black/20 hover:bg-black/40 text-white backdrop-blur-sm z-10">
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-black/20 hover:bg-black/40 text-white backdrop-blur-sm z-10">
+            <ChevronRight className="w-6 h-6" />
+          </button>
         </div>
 
-        {/* IMPROVED THUMBNAILS: Scrollable instead of bunched */}
-        {allImages.length > 1 && (
-          <div className="flex gap-2 p-4 bg-background overflow-x-auto scrollbar-hide border-t border-border/50">
-            {allImages.map((img, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveIndex(i)}
-                className={`relative flex-shrink-0 w-24 h-16 overflow-hidden transition-all duration-300 ${
-                  i === activeIndex 
-                    ? "ring-2 ring-primary ring-offset-2 ring-offset-background opacity-100 scale-95" 
-                    : "opacity-40 hover:opacity-100"
-                }`}
-              >
-                <img src={img} alt="" className="w-full h-full object-cover" />
-              </button>
-            ))}
-          </div>
-        )}
+        {/* Scrollable Thumbnails */}
+        <div className="flex gap-2 p-4 bg-background overflow-x-auto border-t">
+          {allImages.map((img, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveIndex(i)}
+              className={`relative flex-shrink-0 w-24 h-16 overflow-hidden transition-all ${
+                i === activeIndex ? "ring-2 ring-black opacity-100" : "opacity-40 hover:opacity-100"
+              }`}
+            >
+              <img src={img} alt="" className="w-full h-full object-cover" />
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Focus Modal Navigation */}
+      {/* FULL SCREEN MODAL */}
       <AnimatePresence>
         {isMaximized && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/98 p-4"
+            className="fixed inset-0 flex items-center justify-center bg-black z-[9999]" // High Z-Index & Solid Black
             onClick={() => setIsMaximized(false)}
           >
-            <button className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors z-[1001]">
+            {/* Close Button */}
+            <button className="absolute top-10 right-10 text-white z-[10001]">
               <X className="w-10 h-10" />
             </button>
 
-            {allImages.length > 1 && (
-              <>
-                <button onClick={prevImage} className="absolute left-8 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-all p-4 z-[1001]">
-                  <ChevronLeft className="w-16 h-16" />
-                </button>
-                <button onClick={nextImage} className="absolute right-8 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-all p-4 z-[1001]">
-                  <ChevronRight className="w-16 h-16" />
-                </button>
-              </>
-            )}
+            {/* Modal Navigation Arrows */}
+            <button 
+              onClick={prevImage} 
+              className="absolute left-10 top-1/2 -translate-y-1/2 text-white hover:scale-110 transition-transform z-[10001] p-4"
+            >
+              <ChevronLeft className="w-12 h-12" />
+            </button>
+            <button 
+              onClick={nextImage} 
+              className="absolute right-10 top-1/2 -translate-y-1/2 text-white hover:scale-110 transition-transform z-[10001] p-4"
+            >
+              <ChevronRight className="w-12 h-12" />
+            </button>
 
             <motion.img
-              key={`focus-${activeIndex}`}
-              initial={{ scale: 0.95, opacity: 0 }}
+              key={`modal-${activeIndex}`}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               src={allImages[activeIndex]}
-              className="max-w-full max-h-full object-contain pointer-events-none"
+              className="max-w-[90%] max-h-[90%] object-contain"
+              onClick={(e) => e.stopPropagation()} // Prevents closing when clicking the image
             />
           </motion.div>
         )}
