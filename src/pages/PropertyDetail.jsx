@@ -30,29 +30,28 @@ export default function PropertyDetail() {
     enabled: !!slug,
   });
 
-  // === IMAGE FETCHING ===
+  // === FIXED IMAGE FETCHING ===
   useEffect(() => {
     async function fetchImages() {
       if (!property?.slug) {
-        console.log("⏳ Waiting for property data...");
+        console.log("⏳ Waiting for property data to load...");
         return;
       }
 
-      console.log("🔍 Starting image fetch for slug:", property.slug);
+      console.log("🔍 Fetching images for:", property.slug);
 
       const { data: files, error } = await supabase
         .storage
         .from('properties')
         .list(property.slug, {
           limit: 100,
-          offset: 0,
           sortBy: { column: 'name', order: 'asc' }
         });
 
       if (error) {
         console.error("❌ Storage list error:", error);
-        const fallback = [`https://lvuqqlvbuspfkakzxrsi.supabase.co/storage/v1/object/public/properties/${property.slug}/image1.jpg`];
-        setImageUrls(fallback);
+        const fallbackUrl = `https://lvuqqlvbuspfkakzxrsi.supabase.co/storage/v1/object/public/properties/${property.slug}/image1.jpg`;
+        setImageUrls([fallbackUrl]);
         return;
       }
 
@@ -62,12 +61,12 @@ export default function PropertyDetail() {
           `https://lvuqqlvbuspfkakzxrsi.supabase.co/storage/v1/object/public/properties/${property.slug}/${file.name}`
         );
 
-      console.log(`✅ Loaded ${urls.length} images:`, urls.slice(0, 5)); // show first 5 for debugging
+      console.log(`✅ Loaded ${urls.length} images for ${property.slug}`);
       setImageUrls(urls);
     }
 
     fetchImages();
-  }, [property?.slug]);
+  }, [property]); // ← Changed back to full `property` (safer in this case)
 
   if (isLoading) {
     return (
