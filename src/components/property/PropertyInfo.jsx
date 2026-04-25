@@ -56,11 +56,6 @@ export default function PropertyInfo({ property, activeImage }) {
           </p>
         </div>
 
-        {/* Click Instruction for the user */}
-        <p className="text-[10px] font-mono uppercase text-muted-foreground italic">
-          Tip: Click the property photo to expand
-        </p>
-
         {/* Specs Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
