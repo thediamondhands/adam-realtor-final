@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabaseClient";
 import { Button } from "@/components/ui/button";
@@ -10,8 +10,8 @@ import ShowingRequest from "../components/property/ShowingRequest";
 
 export default function PropertyDetail() {
   const [showingOpen, setShowingOpen] = useState(false);
+  const [imageUrls, setImageUrls] = useState([]);
 
-  // Get the slug from the URL path
   const pathParts = window.location.pathname.split("/");
   const slug = pathParts[pathParts.length - 1];
 
@@ -29,6 +29,31 @@ export default function PropertyDetail() {
     },
     enabled: !!slug,
   });
+
+  // This effect runs once we have the property data
+  useEffect(() => {
+    async function fetchImages() {
+      if (property?.slug) {
+        // Look inside the folder matching the slug
+        const { data: files, error } = await supabase
+          .storage
+          .from('properties')
+          .list(property.slug);
+
+        if (error) {
+          console.error("Error fetching images:", error);
+          return;
+        }
+
+        // Create a URL for every file found in that folder
+        const urls = files.map(file => 
+          `https://lvuqqlvbuspfkakzxrsi.supabase.co/storage/v1/object/public/properties/${property.slug}/${file.name}`
+        );
+        setImageUrls(urls);
+      }
+    }
+    fetchImages();
+  }, [property]);
 
   if (isLoading) {
     return (
@@ -51,37 +76,25 @@ export default function PropertyDetail() {
     );
   }
 
-  // Generate the 50 image URLs based on your new bucket structure
-  const projectId = "lvuqqlvbuspfkakzxrsi";
-  const propertyImages = Array.from({ length: 50 }, (_, i) => 
-    `https://${projectId}.supabase.co/storage/v1/object/public/properties/${property.slug}/image${i + 1}.jpg`
-  );
-
   const backTo = property.status === "sold" ? "/sold" : "/listings";
   const backLabel = property.status === "sold" ? "Back to Sold" : "Back to Listings";
 
   return (
     <div className="pt-20">
-      {/* Back button */}
       <div className="px-[8vw] py-4">
         <Link to={backTo} className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors uppercase">
           <ArrowLeft className="w-4 h-4" /> {backLabel}
         </Link>
       </div>
 
-      {/* Split layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
-        {/* Left - Gallery */}
         <div className="h-[60vh] lg:h-auto">
-          {/* Now using the generated array from your bucket instead of property.images */}
-          <PropertyGallery images={propertyImages} />
+          {/* This now uses the exact number of images found in your bucket */}
+          <PropertyGallery images={imageUrls} />
         </div>
 
-        {/* Right - Info */}
         <div className="px-[8vw] lg:px-12 py-12 lg:py-16">
           <PropertyInfo property={property} />
-
-          {/* CTA */}
           <div className="mt-12 pt-8 border-t structural-rule">
             {property.status === "sold" ? (
               <p className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground uppercase">
