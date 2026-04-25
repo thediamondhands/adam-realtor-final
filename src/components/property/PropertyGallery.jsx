@@ -14,7 +14,6 @@ export default function PropertyGallery({ images = [] }) {
 
   const allImages = images.length > 0 ? images : fallbackImages;
 
-  // Handlers for cycling through images
   const nextImage = (e) => {
     e?.stopPropagation();
     setActiveIndex((prev) => (prev < allImages.length - 1 ? prev + 1 : 0));
@@ -25,7 +24,6 @@ export default function PropertyGallery({ images = [] }) {
     setActiveIndex((prev) => (prev > 0 ? prev - 1 : allImages.length - 1));
   };
 
-  // Allow keyboard navigation (Arrow keys) when focused
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!isMaximized) return;
@@ -39,9 +37,9 @@ export default function PropertyGallery({ images = [] }) {
 
   return (
     <>
-      <div className="sticky top-0 h-screen flex flex-col">
-        {/* Main Image */}
-        <div className="flex-1 relative overflow-hidden">
+      <div className="sticky top-0 h-screen flex flex-col bg-background">
+        {/* Main Image View */}
+        <div className="flex-1 relative overflow-hidden group">
           <motion.img
             key={activeIndex}
             src={allImages[activeIndex]}
@@ -49,37 +47,40 @@ export default function PropertyGallery({ images = [] }) {
             className="w-full h-full object-cover cursor-zoom-in"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }}
             onClick={() => setIsMaximized(true)}
           />
 
-          {/* Standard Page Navigation */}
           {allImages.length > 1 && (
             <>
-              <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-background/80 backdrop-blur-sm hover:bg-background transition-colors">
-                <ChevronLeft className="w-5 h-5" />
+              <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-background/60 backdrop-blur-md hover:bg-background transition-all opacity-0 group-hover:opacity-100 z-10">
+                <ChevronLeft className="w-6 h-6" />
               </button>
-              <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-background/80 backdrop-blur-sm hover:bg-background transition-colors">
-                <ChevronRight className="w-5 h-5" />
+              <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-background/60 backdrop-blur-md hover:bg-background transition-all opacity-0 group-hover:opacity-100 z-10">
+                <ChevronRight className="w-6 h-6" />
               </button>
             </>
           )}
 
-          <div className="absolute bottom-4 right-4">
-            <p className="font-mono text-[10px] tracking-[0.15em] text-white/60 bg-black/30 px-3 py-1 backdrop-blur-sm">
+          <div className="absolute bottom-6 right-6 z-10">
+            <p className="font-mono text-[10px] tracking-[0.2em] text-white bg-black/40 px-4 py-2 backdrop-blur-md rounded-full">
               {String(activeIndex + 1).padStart(2, "0")} / {String(allImages.length).padStart(2, "0")}
             </p>
           </div>
         </div>
 
-        {/* Thumbnails */}
+        {/* IMPROVED THUMBNAILS: Scrollable instead of bunched */}
         {allImages.length > 1 && (
-          <div className="flex gap-1 p-2 bg-background">
+          <div className="flex gap-2 p-4 bg-background overflow-x-auto scrollbar-hide border-t border-border/50">
             {allImages.map((img, i) => (
               <button
                 key={i}
                 onClick={() => setActiveIndex(i)}
-                className={`flex-1 h-16 overflow-hidden transition-opacity ${i === activeIndex ? "opacity-100" : "opacity-40 hover:opacity-70"}`}
+                className={`relative flex-shrink-0 w-24 h-16 overflow-hidden transition-all duration-300 ${
+                  i === activeIndex 
+                    ? "ring-2 ring-primary ring-offset-2 ring-offset-background opacity-100 scale-95" 
+                    : "opacity-40 hover:opacity-100"
+                }`}
               >
                 <img src={img} alt="" className="w-full h-full object-cover" />
               </button>
@@ -88,46 +89,37 @@ export default function PropertyGallery({ images = [] }) {
         )}
       </div>
 
-      {/* FULL SCREEN FOCUS MODAL WITH NAVIGATION */}
+      {/* Focus Modal Navigation */}
       <AnimatePresence>
         {isMaximized && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/95 p-4"
+            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/98 p-4"
             onClick={() => setIsMaximized(false)}
           >
-            <button className="absolute top-6 right-6 text-white/70 hover:text-white z-[1001]">
-              <X className="w-8 h-8" />
+            <button className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors z-[1001]">
+              <X className="w-10 h-10" />
             </button>
 
-            {/* Focus Mode Navigation Controls */}
             {allImages.length > 1 && (
               <>
-                <button 
-                  onClick={prevImage}
-                  className="absolute left-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors p-4 z-[1001]"
-                >
-                  <ChevronLeft className="w-12 h-12" />
+                <button onClick={prevImage} className="absolute left-8 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-all p-4 z-[1001]">
+                  <ChevronLeft className="w-16 h-16" />
                 </button>
-                <button 
-                  onClick={nextImage}
-                  className="absolute right-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors p-4 z-[1001]"
-                >
-                  <ChevronRight className="w-12 h-12" />
+                <button onClick={nextImage} className="absolute right-8 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-all p-4 z-[1001]">
+                  <ChevronRight className="w-16 h-16" />
                 </button>
               </>
             )}
 
             <motion.img
-              key={`focus-{activeIndex}`}
-              initial={{ scale: 0.9, opacity: 0 }}
+              key={`focus-${activeIndex}`}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               src={allImages[activeIndex]}
-              alt="Property Detail Focused"
-              className="max-w-full max-h-full object-contain shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
+              className="max-w-full max-h-full object-contain pointer-events-none"
             />
           </motion.div>
         )}
