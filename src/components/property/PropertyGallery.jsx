@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
@@ -6,31 +6,27 @@ export default function PropertyGallery({ images = [] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMaximized, setIsMaximized] = useState(false);
 
-  // --- NEW LOGIC START ---
   const PROJECT_ID = "lvuqqlvbuspfkakzxrsi";
   const BUCKET = "properties";
 
-  // Handle if 'images' is a string from Supabase or an array
-  const imageArray = typeof images === 'string' 
-    ? (images.startsWith('[') ? JSON.parse(images) : [images]) 
-    : images;
+  // Use useMemo to transform the folder name into 22 image URLs
+  const allImages = useMemo(() => {
+    const fallbackImages = [
+      "https://media.base44.com/images/public/69e9765ab76b60a63d59c206/1e7caa363_generated_376820cf.png",
+    ];
 
-  const fallbackImages = [
-    "https://media.base44.com/images/public/69e9765ab76b60a63d59c206/1e7caa363_generated_376820cf.png",
-  ];
+    // Determine if 'images' is the folder name string or an array
+    const folder = Array.isArray(images) ? images[0] : images;
 
-  // Map folder names to actual image paths
-  const allImages = imageArray.length > 0 
-    ? imageArray.flatMap(folderPath => {
-        if (folderPath.startsWith('http')) return folderPath; // Keep external links
-        
-        // Generate URLs for image1.jpg through image22.jpg based on your bucket
-        return Array.from({ length: 22 }, (_, i) => 
-          `https://${PROJECT_ID}.supabase.co/storage/v1/object/public/${BUCKET}/${folderPath}/image${i + 1}.jpg`
-        );
-      }) 
-    : fallbackImages;
-  // --- NEW LOGIC END ---
+    if (!folder || typeof folder !== 'string' || folder.startsWith('http')) {
+      return Array.isArray(images) && images.length > 0 ? images : fallbackImages;
+    }
+
+    // Map the folder name to the 22 .jpg files seen in your Supabase bucket
+    return Array.from({ length: 22 }, (_, i) => 
+      `https://${PROJECT_ID}.supabase.co/storage/v1/object/public/${BUCKET}/${folder}/image${i + 1}.jpg`
+    );
+  }, [images]);
 
   const nextImage = (e) => {
     if (e) e.stopPropagation();
@@ -51,12 +47,11 @@ export default function PropertyGallery({ images = [] }) {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isMaximized, allImages.length]); // Added allImages.length to dependency array
+  }, [isMaximized, allImages.length]);
 
   return (
     <>
       <div className="sticky top-0 h-screen flex flex-col bg-background">
-        {/* Main Image View */}
         <div className="flex-1 relative overflow-hidden group">
           <motion.img
             key={activeIndex}
@@ -68,7 +63,6 @@ export default function PropertyGallery({ images = [] }) {
             transition={{ duration: 0.4 }}
             onClick={() => setIsMaximized(true)}
           />
-
           <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-black/20 hover:bg-black/40 text-white backdrop-blur-sm z-10">
             <ChevronLeft className="w-6 h-6" />
           </button>
@@ -77,7 +71,6 @@ export default function PropertyGallery({ images = [] }) {
           </button>
         </div>
 
-        {/* Scrollable Thumbnails */}
         <div className="flex gap-2 p-4 bg-background overflow-x-auto border-t">
           {allImages.map((img, i) => (
             <button
@@ -89,9 +82,8 @@ export default function PropertyGallery({ images = [] }) {
             >
               <img 
                 src={img} 
-                alt="" 
                 className="w-full h-full object-cover" 
-                onError={(e) => e.target.parentElement.style.display = 'none'} // Hide broken thumbnails
+                onError={(e) => e.target.parentElement.style.display = 'none'} 
               />
             </button>
           ))}
@@ -110,18 +102,14 @@ export default function PropertyGallery({ images = [] }) {
             <button className="absolute top-10 right-10 text-white z-[10001]">
               <X className="w-10 h-10" />
             </button>
-
-            <button onClick={prevImage} className="absolute left-10 top-1/2 -translate-y-1/2 text-white hover:scale-110 transition-transform z-[10001] p-4">
+            <button onClick={prevImage} className="absolute left-10 top-1/2 -translate-y-1/2 text-white p-4 z-[10001]">
               <ChevronLeft className="w-12 h-12" />
             </button>
-            <button onClick={nextImage} className="absolute right-10 top-1/2 -translate-y-1/2 text-white hover:scale-110 transition-transform z-[10001] p-4">
+            <button onClick={nextImage} className="absolute right-10 top-1/2 -translate-y-1/2 text-white p-4 z-[10001]">
               <ChevronRight className="w-12 h-12" />
             </button>
-
             <motion.img
               key={`modal-${activeIndex}`}
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
               src={allImages[activeIndex]}
               className="max-w-[90%] max-h-[90%] object-contain"
               onClick={(e) => e.stopPropagation()}
