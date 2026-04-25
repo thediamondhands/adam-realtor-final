@@ -68,7 +68,7 @@ export default function CurrentListings() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              <Link to={`/property/${property.id}`} className="group">
+              <Link to={`/property/${property.slug}`} className="group">
                 <div className="relative aspect-[4/5] overflow-hidden bg-secondary mb-5">
                   <img
                     src={getImageUrl(property)}
