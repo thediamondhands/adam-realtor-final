@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 export default function PropertyGallery({ images = [] }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isMaximized, setIsMaximized] = useState(false); //
+  const [isMaximized, setIsMaximized] = useState(false);
 
   const fallbackImages = [
     "https://media.base44.com/images/public/69e9765ab76b60a63d59c206/1e7caa363_generated_376820cf.png",
@@ -13,6 +13,29 @@ export default function PropertyGallery({ images = [] }) {
   ];
 
   const allImages = images.length > 0 ? images : fallbackImages;
+
+  // Handlers for cycling through images
+  const nextImage = (e) => {
+    e?.stopPropagation();
+    setActiveIndex((prev) => (prev < allImages.length - 1 ? prev + 1 : 0));
+  };
+
+  const prevImage = (e) => {
+    e?.stopPropagation();
+    setActiveIndex((prev) => (prev > 0 ? prev - 1 : allImages.length - 1));
+  };
+
+  // Allow keyboard navigation (Arrow keys) when focused
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!isMaximized) return;
+      if (e.key === "ArrowRight") nextImage();
+      if (e.key === "ArrowLeft") prevImage();
+      if (e.key === "Escape") setIsMaximized(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMaximized]);
 
   return (
     <>
@@ -23,28 +46,20 @@ export default function PropertyGallery({ images = [] }) {
             key={activeIndex}
             src={allImages[activeIndex]}
             alt={`Property view ${activeIndex + 1}`}
-            className="w-full h-full object-cover cursor-zoom-in" // Added cursor hint
+            className="w-full h-full object-cover cursor-zoom-in"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            onClick={() => setIsMaximized(true)} // Triggers focus mode
+            onClick={() => setIsMaximized(true)}
           />
 
-          {/* Navigation and other indicators stay the same... */}
+          {/* Standard Page Navigation */}
           {allImages.length > 1 && (
             <>
-              <button
-                onClick={() => setActiveIndex((prev) => (prev > 0 ? prev - 1 : allImages.length - 1))}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-background/80 backdrop-blur-sm hover:bg-background transition-colors"
-                aria-label="Previous image"
-              >
+              <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-background/80 backdrop-blur-sm hover:bg-background transition-colors">
                 <ChevronLeft className="w-5 h-5" />
               </button>
-              <button
-                onClick={() => setActiveIndex((prev) => (prev < allImages.length - 1 ? prev + 1 : 0))}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-background/80 backdrop-blur-sm hover:bg-background transition-colors"
-                aria-label="Next image"
-              >
+              <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-background/80 backdrop-blur-sm hover:bg-background transition-colors">
                 <ChevronRight className="w-5 h-5" />
               </button>
             </>
@@ -73,25 +88,46 @@ export default function PropertyGallery({ images = [] }) {
         )}
       </div>
 
-      {/* FULL SCREEN FOCUS MODAL */}
+      {/* FULL SCREEN FOCUS MODAL WITH NAVIGATION */}
       <AnimatePresence>
         {isMaximized && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/95 p-4 md:p-10 cursor-zoom-out"
+            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/95 p-4"
             onClick={() => setIsMaximized(false)}
           >
-            <button className="absolute top-6 right-6 text-white/70 hover:text-white">
+            <button className="absolute top-6 right-6 text-white/70 hover:text-white z-[1001]">
               <X className="w-8 h-8" />
             </button>
+
+            {/* Focus Mode Navigation Controls */}
+            {allImages.length > 1 && (
+              <>
+                <button 
+                  onClick={prevImage}
+                  className="absolute left-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors p-4 z-[1001]"
+                >
+                  <ChevronLeft className="w-12 h-12" />
+                </button>
+                <button 
+                  onClick={nextImage}
+                  className="absolute right-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors p-4 z-[1001]"
+                >
+                  <ChevronRight className="w-12 h-12" />
+                </button>
+              </>
+            )}
+
             <motion.img
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
+              key={`focus-{activeIndex}`}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
               src={allImages[activeIndex]}
-              alt="Property Detail"
+              alt="Property Detail Focused"
               className="max-w-full max-h-full object-contain shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
             />
           </motion.div>
         )}
