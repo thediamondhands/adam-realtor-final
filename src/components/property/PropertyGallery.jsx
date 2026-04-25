@@ -36,12 +36,11 @@ export default function PropertyGallery({ images = [] }) {
             animate={{ opacity: 1 }}
             onClick={() => setIsMaximized(true)}
           />
-
           <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-black/20 text-white z-10 hover:bg-black/40"><ChevronLeft/></button>
           <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-black/20 text-white z-10 hover:bg-black/40"><ChevronRight/></button>
         </div>
 
-        <div className="flex gap-2 p-4 bg-background overflow-x-auto border-t no-scrollbar">
+        <div className="flex gap-2 p-4 overflow-x-auto border-t no-scrollbar">
           {allImages.map((img, i) => (
             <button key={i} onClick={() => setActiveIndex(i)} className={`flex-shrink-0 w-24 h-16 ${i === activeIndex ? "ring-2 ring-black" : "opacity-40"}`}>
               <img src={img} className="w-full h-full object-cover" />
@@ -62,7 +61,6 @@ export default function PropertyGallery({ images = [] }) {
             <button className="absolute top-10 right-10 text-white z-[10001]"><X className="w-10 h-10" /></button>
             <button onClick={prevImage} className="absolute left-10 top-1/2 text-white z-[10001] p-4"><ChevronLeft className="w-12 h-12" /></button>
             <button onClick={nextImage} className="absolute right-10 top-1/2 text-white z-[10001] p-4"><ChevronRight className="w-12 h-12" /></button>
-            
             <motion.img
               key={`modal-${activeIndex}`}
               src={allImages[activeIndex]}
