@@ -87,7 +87,7 @@ export default function PropertyInfo({ property }) {
         <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
           Location
         </h3>
-        <div className="w-full h-[350px] rounded-lg overflow-hidden border border-border grayscale hover:grayscale-0 transition-all duration-500 shadow-sm">
+        <div className="w-full h-[350px] rounded-lg overflow-hidden border border-border shadow-sm">
           <iframe
             width="100%"
             height="100%"
