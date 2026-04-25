@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { MapPin, Maximize, BedDouble, Bath, Calendar } from "lucide-react";
 
 export default function PropertyInfo({ property }) {
-  // Fix for the $0 price: Use listing_price instead of price
+  // Formatter for the price column
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -21,31 +21,30 @@ export default function PropertyInfo({ property }) {
       {/* Header */}
       <div>
         <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-3">
-          {property.property_type || "Residence"}
+          {property.property_type?.replace('_', ' ') || "Residence"}
         </p>
         <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-light leading-[0.95] mb-4">
           {property.title}
         </h1>
         <div className="flex items-center gap-2 text-muted-foreground">
           <MapPin className="w-4 h-4" />
-          {/* Fix for the location: Use location column from Supabase */}
-          <span className="text-sm">{property.location || "Location not specified"}</span>
+          <span className="text-sm">{property.title || "Location not specified"}</span>
         </div>
       </div>
 
-      {/* Price Section */}
+      {/* Price Section - Updated to use 'price' from Supabase */}
       <div className="border-t border-b structural-rule py-6">
         <p className="font-heading text-3xl md:text-4xl font-light">
-          {formatPrice(property.listing_price)}
+          {formatPrice(property.price)}
         </p>
       </div>
 
-      {/* Specs Grid - Ensure keys match Supabase exactly */}
+      {/* Specs Grid - Updated keys to match your table exactly */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
           { icon: BedDouble, label: "Bedrooms", value: property.bedrooms },
           { icon: Bath, label: "Bathrooms", value: property.bathrooms },
-          { icon: Maximize, label: "Sq. Ft.", value: property.sq_ft?.toLocaleString() },
+          { icon: Maximize, label: "Sq. Ft.", value: property.sqft?.toLocaleString() },
           { icon: Calendar, label: "Year Built", value: property.year_built },
         ].map(({ icon: Icon, label, value }) => (
           value && (
