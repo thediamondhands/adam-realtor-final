@@ -8,7 +8,7 @@ import { X, ArrowRight, Check } from "lucide-react";
 import { toast } from "sonner";
 
 export default function ShowingRequest({ property, isOpen, onClose }) {
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
   const [errors, setErrors] = useState({}); // Track validation errors
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -38,7 +38,6 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
         .insert([
           {
             name: formData.name,
-            email: formData.email, // Optional, but kept in form
             phone: formData.phone,
             message: formData.message,
             property_id: property.id,
@@ -85,7 +84,7 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
           ) : (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-lg">
               <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-4">
-                Private Showing
+                Private Showing / Request More Information
               </p>
               <h2 className="font-heading text-4xl md:text-5xl font-light mb-2">{property.title}</h2>
               <p className="text-muted-foreground mb-10">{property.location}</p>
@@ -101,15 +100,6 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
                   />
                   {errors.name && <p className="text-[10px] text-red-500 uppercase tracking-wider">{errors.name}</p>}
                 </div>
-
-                {/* Email Field (Optional) */}
-                <Input
-                  type="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="bg-transparent h-12"
-                />
 
                 {/* Phone Field */}
                 <div className="space-y-1">
