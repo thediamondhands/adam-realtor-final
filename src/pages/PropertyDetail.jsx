@@ -30,12 +30,15 @@ export default function PropertyDetail() {
     enabled: !!slug,
   });
 
-  // Fetch images from Supabase Storage based on the property slug
+  // === IMAGE FETCHING ===
   useEffect(() => {
     async function fetchImages() {
-      if (!property?.slug) return;
+      if (!property?.slug) {
+        console.log("⏳ Waiting for property data...");
+        return;
+      }
 
-      console.log("🔍 Fetching images for folder:", property.slug);
+      console.log("🔍 Starting image fetch for slug:", property.slug);
 
       const { data: files, error } = await supabase
         .storage
@@ -47,28 +50,24 @@ export default function PropertyDetail() {
         });
 
       if (error) {
-        console.error("❌ Error fetching images:", error);
-        
-        // Graceful fallback - at least show the first image
-        const fallbackUrl = `https://lvuqqlvbuspfkakzxrsi.supabase.co/storage/v1/object/public/properties/${property.slug}/image1.jpg`;
-        console.log("⚠️ Using fallback image:", fallbackUrl);
-        setImageUrls([fallbackUrl]);
+        console.error("❌ Storage list error:", error);
+        const fallback = [`https://lvuqqlvbuspfkakzxrsi.supabase.co/storage/v1/object/public/properties/${property.slug}/image1.jpg`];
+        setImageUrls(fallback);
         return;
       }
 
-      // Generate public URLs for every file found in the folder
       const urls = files
-        .filter(file => !file.name.startsWith('.')) // Remove hidden files like .emptyFolderPlaceholder
+        .filter(file => !file.name.startsWith('.'))
         .map(file => 
           `https://lvuqqlvbuspfkakzxrsi.supabase.co/storage/v1/object/public/properties/${property.slug}/${file.name}`
         );
 
-      console.log(`✅ Successfully loaded ${urls.length} images for ${property.slug}`);
+      console.log(`✅ Loaded ${urls.length} images:`, urls.slice(0, 5)); // show first 5 for debugging
       setImageUrls(urls);
     }
 
     fetchImages();
-  }, [property?.slug]); // Fixed dependency array
+  }, [property?.slug]);
 
   if (isLoading) {
     return (
