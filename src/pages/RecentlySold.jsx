@@ -26,14 +26,13 @@ export default function RecentlySold() {
     return `$${numPrice}`;
   };
 
-  const getImageUrl = (property) => {
-  // Use the slug to point to your new folder structure
-  // Replace 'lvuqqlvbuspfkakzxrsi' with your actual Supabase project ID
-  const projectId = "lvuqqlvbuspfkakzxrsi"; 
+  // New simplified function
+const getImageUrl = (property) => {
+  const projectId = "lvuqqlvbuspfkakzxrsi";
   const bucketUrl = `https://${projectId}.supabase.co/storage/v1/object/public/properties`;
   
-  // We assume 'image1.jpg' is always your primary thumbnail
-  return `${bucketUrl}/${property.slug}/image1.jpg`;
+  // Use the specific filename stored in your database
+  return `${bucketUrl}/${property.slug}/${property.thumbnail_filename}`;
 };
 
   return (
