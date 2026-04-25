@@ -21,7 +21,7 @@ export default function PropertyDetail() {
       const { data, error } = await supabase
         .from('properties')
         .select('*')
-        .eq('slug', slug) // Use the slug column here
+        .eq('slug', slug)
         .single();
       
       if (error) throw error;
@@ -29,7 +29,6 @@ export default function PropertyDetail() {
     },
     enabled: !!slug,
   });
-  // ... rest of the file
 
   if (isLoading) {
     return (
@@ -52,6 +51,12 @@ export default function PropertyDetail() {
     );
   }
 
+  // Generate the 50 image URLs based on your new bucket structure
+  const projectId = "lvuqqlvbuspfkakzxrsi";
+  const propertyImages = Array.from({ length: 50 }, (_, i) => 
+    `https://${projectId}.supabase.co/storage/v1/object/public/properties/${property.slug}/image${i + 1}.jpg`
+  );
+
   const backTo = property.status === "sold" ? "/sold" : "/listings";
   const backLabel = property.status === "sold" ? "Back to Sold" : "Back to Listings";
 
@@ -68,7 +73,8 @@ export default function PropertyDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         {/* Left - Gallery */}
         <div className="h-[60vh] lg:h-auto">
-          <PropertyGallery images={property.images} />
+          {/* Now using the generated array from your bucket instead of property.images */}
+          <PropertyGallery images={propertyImages} />
         </div>
 
         {/* Right - Info */}
