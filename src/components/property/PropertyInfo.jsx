@@ -29,27 +29,20 @@ export default function PropertyInfo({ property }) {
         <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-light leading-[0.95] mb-4">
           {property.title}
         </h1>
-        
-        <a 
-          href={mapsUrl} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors group w-fit"
-        >
+        <div className="flex items-center gap-2 text-muted-foreground">
           <MapPin className="w-4 h-4" />
-          <span className="text-sm underline underline-offset-4">{property.location}</span>
-          <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100" />
-        </a>
+          <span className="text-sm">{property.location || "Location not specified"}</span>
+        </div>
       </div>
 
-      {/* Price Section */}
+      {/* Price */}
       <div className="border-t border-b structural-rule py-6">
         <p className="font-heading text-3xl md:text-4xl font-light">
           {formatPrice(property.listing_price)}
         </p>
       </div>
 
-      {/* Specs Grid */}
+      {/* Specs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
           { icon: BedDouble, label: "Bedrooms", value: property.bedrooms },
@@ -71,28 +64,17 @@ export default function PropertyInfo({ property }) {
 
       {/* Story */}
       {property.description && (
-        <div>
-          <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-4">
-            The Story
-          </h3>
-          <p className="text-foreground leading-relaxed mb-8">{property.description}</p>
+        <div className="pt-4">
+          <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-4">The Story</h3>
+          <p className="text-foreground leading-relaxed">{property.description}</p>
         </div>
       )}
 
-      {/* Map Section */}
+      {/* Map */}
       <div className="space-y-4 pt-4 border-t">
-        <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
-          Location
-        </h3>
-        <div className="w-full h-[350px] rounded-lg overflow-hidden border border-border">
-          <iframe
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            src={embedUrl}
-            allowFullScreen
-            loading="lazy"
-          ></iframe>
+        <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Location</h3>
+        <div className="w-full h-[350px] rounded-lg overflow-hidden border border-border shadow-sm">
+          <iframe width="100%" height="100%" style={{ border: 0 }} src={embedUrl} allowFullScreen loading="lazy"></iframe>
         </div>
       </div>
     </motion.div>
