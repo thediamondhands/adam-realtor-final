@@ -27,13 +27,23 @@ export default function RecentlySold() {
   };
 
   const getImageUrl = (property) => {
-    const projectId = "lvuqqlvbuspfkakzxrsi"; 
-    const bucketUrl = `https://${projectId}.supabase.co/storage/v1/object/public/properties`;
+  const projectId = "lvuqqlvbuspfkakzxrsi"; 
+  const bucketUrl = `https://${projectId}.supabase.co/storage/v1/object/public/properties`;
+
+  // Use the slug as the folder name
+  const folder = property.slug;
   
-  // Now it pulls the correct extension for every specific property
-    const fileName = property.thumbnail_url || 'image1.jpg'; // fallback just in case
-    return `${bucketUrl}/${property.slug}/${fileName}`;
-  };
+  // If thumbnail_url exists and is just the filename (e.g. "image1.jpg")
+  // Or if it's missing, default to the first image pattern used in your gallery
+  const fileName = property.thumbnail_url || 'image1.jpg';
+
+  // Ensure we aren't doubling up the slug if it's already in the thumbnail_url
+  if (fileName.includes('/')) {
+    return `${bucketUrl}/${fileName}`;
+  }
+
+  return `${bucketUrl}/${folder}/${fileName}`;
+};
 
   return (
     <div className="pt-28 pb-24 px-[8vw]">
