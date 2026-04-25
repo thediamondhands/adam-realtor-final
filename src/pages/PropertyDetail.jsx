@@ -13,16 +13,13 @@ export default function PropertyDetail() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const pathParts = window.location.pathname.split("/");
-  const propertyId = pathParts[pathParts.length - 1];
+  const slug = pathParts[pathParts.length - 1];
 
-  const { data: property, isLoading } = useQuery({
-  queryKey: ["property", propertyId],
-  queryFn: async () => {
-    const { data, error } = await supabase
-      .from('properties')
-      .select('*')
-      .eq('id', propertyId)
-      .single();
+  const { data, error } = await supabase
+  .from('properties')
+  .select('*')
+  .eq('slug', slug) // Change 'id' to 'slug'
+  .single();
     
     if (error) throw error;
     return data;
