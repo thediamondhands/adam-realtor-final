@@ -76,7 +76,7 @@ export default function PropertyInfo({ property }) {
       {property.description && (
         <div>
           <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-4">
-            The Story
+            Description
           </h3>
           <p className="text-foreground leading-relaxed mb-8">{property.description}</p>
         </div>
