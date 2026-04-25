@@ -28,14 +28,14 @@ export default function CurrentListings() {
   };
 
   const getImageUrl = (property) => {
-    if (!property.images) return "https://via.placeholder.com/800x1000?text=No+Image";
-    try {
-      const imgArray = typeof property.images === 'string' ? JSON.parse(property.images) : property.images;
-      return imgArray[0];
-    } catch (e) {
-      return property.images;
-    }
-  };
+  // Use the slug to point to your new folder structure
+  // Replace 'lvuqqlvbuspfkakzxrsi' with your actual Supabase project ID
+  const projectId = "lvuqqlvbuspfkakzxrsi"; 
+  const bucketUrl = `https://${projectId}.supabase.co/storage/v1/object/public/properties`;
+  
+  // We assume 'image1.jpg' is always your primary thumbnail
+  return `${bucketUrl}/${property.slug}/image1.jpg`;
+};
 
   return (
     <div className="pt-28 pb-24 px-[8vw]">
