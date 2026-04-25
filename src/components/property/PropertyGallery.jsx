@@ -2,17 +2,20 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
-export default function PropertyGallery({ images = [] }) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isMaximized, setIsMaximized] = useState(false);
+// Inside PropertyGallery({ images })
+const PROJECT_ID = "lvuqqlvbuspfkakzxrsi";
+const BUCKET = "properties";
 
-  const fallbackImages = [
-    "https://media.base44.com/images/public/69e9765ab76b60a63d59c206/1e7caa363_generated_376820cf.png",
-    "https://media.base44.com/images/public/69e9765ab76b60a63d59c206/53e2b491e_generated_52d1e894.png",
-    "https://media.base44.com/images/public/69e9765ab76b60a63d59c206/69f670621_generated_81ddb9a3.png",
-  ];
+const allImages = images.length > 0 ? images.flatMap(folderPath => {
+  // If it's a Zillow link from your DB, keep it
+  if (folderPath.startsWith('http')) return folderPath;
 
-  const allImages = images.length > 0 ? images : fallbackImages;
+  // Otherwise, treat folderPath as the folder name from your screenshot
+  // This generates URLs for image1.jpg through image20.jpg
+  return Array.from({ length: 20 }, (_, i) => 
+    `https://${PROJECT_ID}.supabase.co/storage/v1/object/public/${BUCKET}/${folderPath}/image${i + 1}.jpg`
+  );
+}) : fallbackImages;
 
   const nextImage = (e) => {
     if (e) e.stopPropagation();
