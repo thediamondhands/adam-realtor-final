@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { MapPin, Maximize, BedDouble, Bath, Calendar } from "lucide-react";
+import { MapPin, Maximize, BedDouble, Bath, Calendar, ExternalLink } from "lucide-react";
 
 export default function PropertyInfo({ property }) {
-  // Formatter for the price column
+  // Formatter for currency
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -10,6 +10,11 @@ export default function PropertyInfo({ property }) {
       maximumFractionDigits: 0,
     }).format(price || 0);
   };
+
+  // Generate Google Maps URL for the clickable link and the embed iframe
+  const encodedAddress = encodeURIComponent(property.title || "");
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+  const embedUrl = `https://maps.google.com/maps?q=${encodedAddress}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
 
   return (
     <motion.div
@@ -26,20 +31,28 @@ export default function PropertyInfo({ property }) {
         <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-light leading-[0.95] mb-4">
           {property.title}
         </h1>
-        <div className="flex items-center gap-2 text-muted-foreground">
+        
+        {/* Clickable Location Link */}
+        <a 
+          href={mapsUrl} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors group w-fit"
+        >
           <MapPin className="w-4 h-4" />
-          <span className="text-sm">{property.title || "Location not specified"}</span>
-        </div>
+          <span className="text-sm underline underline-offset-4">View on Google Maps</span>
+          <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+        </a>
       </div>
 
-      {/* Price Section - Updated to use 'price' from Supabase */}
+      {/* Price Section - Using 'price' from Supabase */}
       <div className="border-t border-b structural-rule py-6">
         <p className="font-heading text-3xl md:text-4xl font-light">
           {formatPrice(property.price)}
         </p>
       </div>
 
-      {/* Specs Grid - Updated keys to match your table exactly */}
+      {/* Specs Grid - Using exact Supabase column names: price, bedrooms, bathrooms, sqft, year_built */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
           { icon: BedDouble, label: "Bedrooms", value: property.bedrooms },
@@ -59,15 +72,33 @@ export default function PropertyInfo({ property }) {
         ))}
       </div>
 
-      {/* Story/Description */}
+      {/* Story Section */}
       {property.description && (
         <div>
           <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-4">
             The Story
           </h3>
-          <p className="text-foreground leading-relaxed">{property.description}</p>
+          <p className="text-foreground leading-relaxed mb-8">{property.description}</p>
         </div>
       )}
+
+      {/* Embedded Google Map Section */}
+      <div className="space-y-4 pt-4 border-t">
+        <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
+          Location
+        </h3>
+        <div className="w-full h-[350px] rounded-lg overflow-hidden border border-border grayscale hover:grayscale-0 transition-all duration-500 shadow-sm">
+          <iframe
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            src={embedUrl}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
     </motion.div>
   );
 }
