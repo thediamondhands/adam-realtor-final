@@ -6,25 +6,27 @@ export default function PropertyGallery({ images = [] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMaximized, setIsMaximized] = useState(false);
 
+  // Fallback images if the property has none
   const fallbackImages = [
     "https://media.base44.com/images/public/69e9765ab76b60a63d59c206/1e7caa363_generated_376820cf.png",
     "https://media.base44.com/images/public/69e9765ab76b60a63d59c206/53e2b491e_generated_52d1e894.png",
     "https://media.base44.com/images/public/69e9765ab76b60a63d59c206/69f670621_generated_81ddb9a3.png",
   ];
 
-  const allImages = images.length > 0 ? images : fallbackImages;
+  const allImages = images && images.length > 0 ? images : fallbackImages;
 
+  // Safer navigation functions
   const nextImage = (e) => {
     if (e) e.stopPropagation();
-    setActiveIndex((prev) => (prev < allImages.length - 1 ? prev + 1 : 0));
+    setActiveIndex((prev) => (prev + 1) % allImages.length);
   };
 
   const prevImage = (e) => {
     if (e) e.stopPropagation();
-    setActiveIndex((prev) => (prev > 0 ? prev - 1 : allImages.length - 1));
+    setActiveIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
   };
 
-  // Enable arrow key navigation
+  // Keyboard support for the lightbox
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!isMaximized) return;
@@ -34,7 +36,7 @@ export default function PropertyGallery({ images = [] }) {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isMaximized]);
+  }, [isMaximized, allImages.length]);
 
   return (
     <>
@@ -50,19 +52,30 @@ export default function PropertyGallery({ images = [] }) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
             onClick={() => setIsMaximized(true)}
+            onError={(e) => { e.target.src = fallbackImages[0]; }} // Auto-fix broken images
           />
 
           {/* Regular View Arrows */}
-          <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-black/20 hover:bg-black/40 text-white backdrop-blur-sm z-10">
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-black/20 hover:bg-black/40 text-white backdrop-blur-sm z-10">
-            <ChevronRight className="w-6 h-6" />
-          </button>
+          {allImages.length > 1 && (
+            <>
+              <button 
+                onClick={prevImage} 
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-black/20 hover:bg-black/40 text-white backdrop-blur-sm z-10"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button 
+                onClick={nextImage} 
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-black/20 hover:bg-black/40 text-white backdrop-blur-sm z-10"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </>
+          )}
         </div>
 
-        {/* Scrollable Thumbnails */}
-        <div className="flex gap-2 p-4 bg-background overflow-x-auto border-t">
+        {/* Scrollable Thumbnails - Adjusted for 50+ photos */}
+        <div className="flex gap-2 p-4 bg-background overflow-x-auto border-t no-scrollbar">
           {allImages.map((img, i) => (
             <button
               key={i}
@@ -84,27 +97,29 @@ export default function PropertyGallery({ images = [] }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 flex items-center justify-center bg-black z-[9999]" // High Z-Index & Solid Black
+            className="fixed inset-0 flex items-center justify-center bg-black z-[9999]"
             onClick={() => setIsMaximized(false)}
           >
-            {/* Close Button */}
             <button className="absolute top-10 right-10 text-white z-[10001]">
               <X className="w-10 h-10" />
             </button>
 
-            {/* Modal Navigation Arrows */}
-            <button 
-              onClick={prevImage} 
-              className="absolute left-10 top-1/2 -translate-y-1/2 text-white hover:scale-110 transition-transform z-[10001] p-4"
-            >
-              <ChevronLeft className="w-12 h-12" />
-            </button>
-            <button 
-              onClick={nextImage} 
-              className="absolute right-10 top-1/2 -translate-y-1/2 text-white hover:scale-110 transition-transform z-[10001] p-4"
-            >
-              <ChevronRight className="w-12 h-12" />
-            </button>
+            {allImages.length > 1 && (
+              <>
+                <button 
+                  onClick={prevImage} 
+                  className="absolute left-10 top-1/2 -translate-y-1/2 text-white hover:scale-110 transition-transform z-[10001] p-4"
+                >
+                  <ChevronLeft className="w-12 h-12" />
+                </button>
+                <button 
+                  onClick={nextImage} 
+                  className="absolute right-10 top-1/2 -translate-y-1/2 text-white hover:scale-110 transition-transform z-[10001] p-4"
+                >
+                  <ChevronRight className="w-12 h-12" />
+                </button>
+              </>
+            )}
 
             <motion.img
               key={`modal-${activeIndex}`}
@@ -112,7 +127,7 @@ export default function PropertyGallery({ images = [] }) {
               animate={{ scale: 1, opacity: 1 }}
               src={allImages[activeIndex]}
               className="max-w-[90%] max-h-[90%] object-contain"
-              onClick={(e) => e.stopPropagation()} // Prevents closing when clicking the image
+              onClick={(e) => e.stopPropagation()}
             />
           </motion.div>
         )}
