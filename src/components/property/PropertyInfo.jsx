@@ -1,11 +1,10 @@
-import { motion } from "framer-motion";
 import { MapPin, Maximize, BedDouble, Bath, Calendar } from "lucide-react";
 
 export default function PropertyInfo({ property }) {
   if (!property) return null;
 
   const formatPrice = (price) => {
-    const numPrice = Number(price || property.price || property.listing_price || 0);
+    const numPrice = Number(price || property.price || 0);
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -13,49 +12,38 @@ export default function PropertyInfo({ property }) {
     }).format(numPrice);
   };
 
-  const displayAddress = property.location || property.address || property.title || "";
-  const encodedAddress = encodeURIComponent(displayAddress);
-  const simpleEmbedUrl = `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodedAddress}`;
+  const address = property.location || property.address || property.title || "";
+  const encodedAddress = encodeURIComponent(address);
+  const embedUrl = `https://maps.google.com/maps?q=${encodedAddress}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      /* CRITICAL FIXES:
-         1. Added 'relative z-20' so it sits on top of the gallery.
-         2. Increased 'pt-48' to push it way down on mobile.
-         3. Added 'bg-[#fdfbf7]' (or your page color) to mask overlapping images.
-      */
-      className="relative z-20 space-y-10 px-6 pb-20 pt-48 md:pt-0 bg-[#fdfbf7]"
-    >
+    /* We are using mt-[40vh] to force the content to start 40% down the screen, 
+       ensuring it clears the hero image and thumbnails entirely. */
+    <div className="relative w-full mt-[45vh] md:mt-0 px-6 pb-20 bg-white">
+      
       {/* Header */}
-      <div className="space-y-3">
-        <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
+      <div className="py-8">
+        <p className="font-mono text-[10px] tracking-[0.3em] text-gray-500 uppercase mb-2">
           {property.property_type?.replace('_', ' ') || "Residence"}
         </p>
-        
-        <h1 className="font-heading text-4xl md:text-6xl font-light leading-tight text-black">
+        <h1 className="text-4xl md:text-6xl font-light text-black mb-4">
           {property.title}
         </h1>
-
-        <div className="flex items-start gap-2 text-muted-foreground pt-1">
-          <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
-          <span className="text-base font-medium">
-            {displayAddress}
-          </span>
+        <div className="flex items-center gap-2 text-gray-600">
+          <MapPin className="w-5 h-5 flex-shrink-0" />
+          <span className="text-lg">{address}</span>
         </div>
       </div>
 
       {/* Price */}
-      <div className="border-t border-b border-black/10 py-8">
-        <p className="font-heading text-3xl md:text-5xl font-light text-black">
+      <div className="border-y border-gray-200 py-8 my-8">
+        <p className="text-4xl font-light text-black">
           {formatPrice(property.price)}
         </p>
       </div>
 
-      {/* Specs Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
+      {/* Specs */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
         {[
           { icon: BedDouble, label: "Bedrooms", value: property.bedrooms },
           { icon: Bath, label: "Bathrooms", value: property.bathrooms },
@@ -63,12 +51,10 @@ export default function PropertyInfo({ property }) {
           { icon: Calendar, label: "Year Built", value: property.year_built },
         ].map(({ icon: Icon, label, value }) => (
           value && (
-            <div key={label} className="flex flex-col">
-              <Icon className="w-6 h-6 text-primary mb-3" />
-              <p className="font-heading text-2xl font-light leading-none mb-2">{value}</p>
-              <p className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground uppercase">
-                {label}
-              </p>
+            <div key={label}>
+              <Icon className="w-6 h-6 text-gray-400 mb-2" />
+              <p className="text-2xl font-light">{value}</p>
+              <p className="font-mono text-[10px] tracking-widest text-gray-500 uppercase">{label}</p>
             </div>
           )
         ))}
@@ -76,28 +62,17 @@ export default function PropertyInfo({ property }) {
 
       {/* Description */}
       {property.description && (
-        <div className="pt-4 border-t border-black/5">
-          <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-6">Description</h3>
-          <p className="text-black/80 leading-relaxed text-lg font-light">
+        <div className="mt-12 pt-12 border-t border-gray-100">
+          <p className="text-gray-800 leading-relaxed text-lg font-light whitespace-pre-wrap">
             {property.description}
           </p>
         </div>
       )}
 
       {/* Map */}
-      <div className="space-y-4 pt-4 border-t border-black/5">
-        <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Location</h3>
-        <div className="w-full h-[350px] rounded-lg overflow-hidden border border-black/10 grayscale hover:grayscale-0 transition-all">
-          <iframe 
-            width="100%" 
-            height="100%" 
-            style={{ border: 0 }} 
-            src={`https://maps.google.com/maps?q=${encodedAddress}&t=&z=13&ie=UTF8&iwloc=&output=embed`} 
-            allowFullScreen 
-            loading="lazy"
-          ></iframe>
-        </div>
+      <div className="mt-12 rounded-xl overflow-hidden h-[300px] border border-gray-200">
+        <iframe width="100%" height="100%" src={embedUrl} style={{ border: 0 }}></iframe>
       </div>
-    </motion.div>
+    </div>
   );
 }
