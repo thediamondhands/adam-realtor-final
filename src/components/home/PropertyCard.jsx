@@ -16,7 +16,7 @@ export default function PropertyCard({ property, index, imageUrl }) {
 
   return (
     /* Changed from /property/${property.id} to /listings/${property.slug} */
-    <Link to={`/listings/${property.slug}`}>
+    <Link to={`/property/${property.slug}`}>
       <motion.div
         className="flex-shrink-0 cursor-pointer group"
         onMouseEnter={() => setIsHovered(true)}
