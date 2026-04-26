@@ -29,8 +29,6 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
       return;
     }
 
-    console.log("🔍 Submitting with property:", property?.title);
-
     setIsSubmitting(true);
 
     try {
@@ -40,27 +38,25 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
           {
             name: formData.name,
             phone: formData.phone,
-            message: formData.message,
-            // Removed property_id since the column doesn't exist
+            message: `${formData.message}\n\nProperty: ${property?.title || 'Unknown Property'}`,
             type: "showing_request",
-            // Optional: Add property title to message so you know which property it was for
-            message: `${formData.message}\n\nProperty: ${property?.title || 'Unknown'}`,
           }
         ])
         .select();
 
       if (error) {
-        console.error("❌ Supabase Error:", error);
-        toast.error(`Error: ${error.message}`);
+        console.error("Supabase Error:", error);
+        toast.error(error.message.includes("security") 
+          ? "Database permission error. Please check RLS policies." 
+          : `Error: ${error.message}`);
         throw error;
       }
 
-      console.log("✅ Success:", data);
+      console.log("✅ Submitted successfully:", data);
       setIsSubmitted(true);
       toast.success("Showing request submitted!");
     } catch (error) {
-      console.error("❌ Full error:", error);
-      toast.error("Something went wrong. Please try again.");
+      console.error("Full error:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -82,10 +78,7 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
           className="fixed inset-0 z-[100] bg-background flex items-center justify-center px-[8vw]"
         >
           <button
-            onClick={() => {
-              onClose();
-              resetForm();
-            }}
+            onClick={() => { onClose(); resetForm(); }}
             className="absolute top-6 right-[8vw] p-2 min-w-[44px] min-h-[44px] flex items-center justify-center hover:opacity-60 transition-opacity"
           >
             <X className="w-6 h-6" />
