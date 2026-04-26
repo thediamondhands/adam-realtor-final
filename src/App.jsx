@@ -1,7 +1,9 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect } from "react";
+
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -12,6 +14,21 @@ import RecentlySold from './pages/RecentlySold';
 import PropertyDetail from './pages/PropertyDetail';
 import Inquiry from './pages/Inquiry';
 import About from './pages/About';
+
+// Scroll to top on every route change
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",   // No animation, instant jump to top
+    });
+  }, [pathname]);
+
+  return null;
+}
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -30,7 +47,6 @@ const AuthenticatedApp = () => {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
       navigateToLogin();
       return null;
     }
@@ -38,23 +54,24 @@ const AuthenticatedApp = () => {
 
   // Render the main app
   return (
-    <Routes>
-      <Route element={<SiteLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/listings" element={<CurrentListings />} />
-        <Route path="/sold" element={<RecentlySold />} />
-        <Route path="/property/:slug" element={<PropertyDetail />} />
-        <Route path="/inquiry" element={<Inquiry />} />
-        <Route path="/about" element={<About />} />
-      </Route>
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route element={<SiteLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/listings" element={<CurrentListings />} />
+          <Route path="/sold" element={<RecentlySold />} />
+          <Route path="/property/:slug" element={<PropertyDetail />} />
+          <Route path="/inquiry" element={<Inquiry />} />
+          <Route path="/about" element={<About />} />
+        </Route>
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </>
   );
 };
 
-
 function App() {
-
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
