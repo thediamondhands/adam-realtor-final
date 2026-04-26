@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-export default function PropertyCard({ property, index }) {
+export default function PropertyCard({ property, index, imageUrl }) {
   const [isHovered, setIsHovered] = useState(false);
 
   const formatPrice = (price) => {
@@ -11,10 +11,14 @@ export default function PropertyCard({ property, index }) {
     return `$${price}`;
   };
 
+  // We prioritize the imageUrl prop we passed from the Portfolio file
+  const displayImage = imageUrl || property.image || property.images?.[0] || "https://via.placeholder.com/600x800";
+
   return (
-    <Link to={`/property/${property.id}`}>
+    /* Changed from /property/${property.id} to /listings/${property.slug} */
+    <Link to={`/listings/${property.slug}`}>
       <motion.div
-        className="flex-shrink-0 w-[75vw] md:w-[35vw] lg:w-[28vw] cursor-pointer group"
+        className="flex-shrink-0 cursor-pointer group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         initial={{ opacity: 0, y: 30 }}
@@ -25,7 +29,7 @@ export default function PropertyCard({ property, index }) {
         {/* Image Container - 4:5 aspect ratio */}
         <div className="relative aspect-[4/5] overflow-hidden bg-secondary">
           <motion.img
-            src={property.images?.[0] || "https://media.base44.com/images/public/69e9765ab76b60a63d59c206/1e7caa363_generated_376820cf.png"}
+            src={displayImage} // Using our new displayImage logic
             alt={property.title}
             className="w-full h-full object-cover"
             animate={{ scale: isHovered ? 1.05 : 1 }}
@@ -40,13 +44,6 @@ export default function PropertyCard({ property, index }) {
               </span>
             </div>
           )}
-          {property.status === "pending" && (
-            <div className="absolute top-3 right-3">
-              <span className="font-mono text-[9px] tracking-[0.2em] uppercase bg-primary/90 text-primary-foreground px-3 py-1">
-                Under Contract
-              </span>
-            </div>
-          )}
           {property.status === "sold" && (
             <div className="absolute top-3 right-3">
               <span className="font-mono text-[9px] tracking-[0.2em] uppercase bg-foreground/90 text-background px-3 py-1">
@@ -55,7 +52,7 @@ export default function PropertyCard({ property, index }) {
             </div>
           )}
 
-          {/* Hover overlay with atmosphere */}
+          {/* Hover overlay */}
           <motion.div
             className="absolute inset-0 bg-black/40 flex items-end p-6"
             initial={{ opacity: 0 }}
