@@ -13,46 +13,45 @@ export default function PropertyInfo({ property }) {
     }).format(numPrice);
   };
 
-  // Fixed the syntax here: added $ and used a standard Google Maps embed format
+  // Fixed syntax with ${}
   const addressString = property.location || property.address || property.title || "";
   const encodedAddress = encodeURIComponent(addressString);
-  const embedUrl = `https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${encodedAddress}`;
-  
-  // Alternative if you don't have an API key (standard iframe embed):
+  const embedUrl = `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodedAddress}`;
   const simpleEmbedUrl = `https://maps.google.com/maps?q=${encodedAddress}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
 
   return (
+    /* Added relative z-10 and pt-12 to force it out from behind overlapping elements */
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="space-y-6 md:space-y-10 px-4 md:px-0"
+      className="relative z-10 space-y-8 px-6 pb-20 pt-12 bg-white md:bg-transparent md:pt-0"
     >
-      {/* Header */}
-      <div>
-        <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-2">
+      {/* Header - Address & Title */}
+      <div className="flex flex-col gap-2">
+        <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
           {property.property_type?.replace('_', ' ') || "Residence"}
         </p>
-        <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl font-light leading-tight mb-3">
+        <h1 className="font-heading text-4xl md:text-6xl font-light leading-tight text-black">
           {property.title}
         </h1>
-        <div className="flex items-start gap-2 text-muted-foreground">
-          <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-          <span className="text-sm md:text-base">
+        <div className="flex items-start gap-2 text-muted-foreground mt-2">
+          <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0 text-primary" />
+          <span className="text-base font-medium">
             {property.location || property.address || "Address not available"}
           </span>
         </div>
       </div>
 
-      {/* Price */}
-      <div className="border-t border-b border-border py-6">
-        <p className="font-heading text-3xl md:text-4xl font-light">
+      {/* Price Section */}
+      <div className="border-t border-b border-gray-200 py-8">
+        <p className="font-heading text-3xl md:text-5xl font-light text-black">
           {formatPrice(property.price)}
         </p>
       </div>
 
-      {/* Specs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {/* Specs Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
         {[
           { icon: BedDouble, label: "Bedrooms", value: property.bedrooms },
           { icon: Bath, label: "Bathrooms", value: property.bathrooms },
@@ -60,9 +59,9 @@ export default function PropertyInfo({ property }) {
           { icon: Calendar, label: "Year Built", value: property.year_built },
         ].map(({ icon: Icon, label, value }) => (
           value && (
-            <div key={label}>
-              <Icon className="w-5 h-5 text-primary mb-2" />
-              <p className="font-heading text-2xl font-light">{value}</p>
+            <div key={label} className="flex flex-col">
+              <Icon className="w-6 h-6 text-primary mb-3" />
+              <p className="font-heading text-3xl font-light leading-none mb-1">{value}</p>
               <p className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground uppercase">
                 {label}
               </p>
@@ -73,18 +72,18 @@ export default function PropertyInfo({ property }) {
 
       {/* Story */}
       {property.description && (
-        <div className="pt-4">
-          <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-4">Description</h3>
-          <p className="text-foreground leading-relaxed text-sm md:text-base">
+        <div className="pt-6 border-t border-gray-100">
+          <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-6">The Story</h3>
+          <p className="text-gray-800 leading-relaxed text-lg font-light">
             {property.description}
           </p>
         </div>
       )}
 
-      {/* Map */}
-      <div className="space-y-4 pt-4 border-t">
+      {/* Map Section */}
+      <div className="space-y-4 pt-10 border-t border-gray-100">
         <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">Location</h3>
-        <div className="w-full h-[300px] md:h-[450px] rounded-lg overflow-hidden border border-border shadow-sm">
+        <div className="w-full h-[350px] rounded-xl overflow-hidden border border-gray-200 shadow-inner">
           <iframe 
             width="100%" 
             height="100%" 
