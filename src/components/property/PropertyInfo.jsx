@@ -22,7 +22,10 @@ export default function PropertyInfo({ property }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="relative z-10 bg-[#fdfbf7] mt-0 md:-mt-1 pb-20 px-4 sm:px-6 md:px-8 pt-6 md:pt-12"
+      /* FIX: Removed pt-6/pt-12 and md:-mt-1. 
+         Setting pt-0 ensures the "SINGLE FAMILY" text starts at the very top.
+      */
+      className="relative z-10 bg-[#fdfbf7] pb-20 px-4 sm:px-6 md:px-8 pt-0"
     >
       {/* Header */}
       <div className="space-y-4 mb-8 md:mb-10">
