@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient"; 
 import { useQuery } from "@tanstack/react-query";
@@ -6,46 +6,51 @@ import PropertyCard from "./PropertyCard";
 
 export default function Portfolio() {
   const scrollRef = useRef(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  const { data: properties, error, isLoading } = useQuery({
+  // 1. Fetch Data
+  const { data: properties, isLoading } = useQuery({
     queryKey: ["properties-home"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('properties')
         .select('*')
-        .order('created_date', { ascending: false }); // Added sorting here for you
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       return data;
     }
   });
 
-  // Data Filtering
-  const featuredListings = properties?.filter(p => p.status === "available") || [];
-  const soldListings = properties?.filter(p => p.status === "sold") || [];
-
+  // 2. Image URL Helper
   const getImageUrl = (property) => {
-  // Use the slug to point to your new folder structure
-  // Replace 'lvuqqlvbuspfkakzxrsi' with your actual Supabase project ID
-  const projectId = "lvuqqlvbuspfkakzxrsi"; 
-  const bucketUrl = `https://${projectId}.supabase.co/storage/v1/object/public/properties`;
-  
-  // We assume 'image1.jpg' is always your primary thumbnail
-  return `${bucketUrl}/${property.slug}/image1.jpg`;
-};
-  
+    const projectId = "lvuqqlvbuspfkakzxrsi"; 
+    const bucketUrl = `https://${projectId}.supabase.co/storage/v1/object/public/properties`;
+    
+    // If there's no slug, return a placeholder to prevent broken layouts
+    if (!property.slug) return "https://via.placeholder.com/600x400?text=No+Image+Available";
+    
+    return `${bucketUrl}/${property.slug}/image1.jpg`;
+  };
+
+  // 3. Horizontal Scroll Logic
   const handleWheel = (e) => {
     if (!scrollRef.current || !isHovered) return;
-    const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
+    // Standardizing scroll speed across browsers
     scrollRef.current.scrollLeft += e.deltaY;
-    const progress = scrollRef.current.scrollLeft / (maxScroll || 1);
-    setScrollProgress(Math.max(0, Math.min(1, progress)));
   };
 
   if (isLoading) return <div className="py-20 text-center text-muted-foreground animate-pulse">Loading listings...</div>;
   if (!properties || properties.length === 0) return null;
+
+  // Filter listings and inject the correct image URL immediately
+  const featuredListings = properties
+    .filter(p => p.status === "available")
+    .map(p => ({ ...p, displayImage: getImageUrl(p) }));
+
+  const soldListings = properties
+    .filter(p => p.status === "sold")
+    .map(p => ({ ...p, displayImage: getImageUrl(p) }));
 
   return (
     <section className="py-16 space-y-24">
@@ -61,13 +66,18 @@ export default function Portfolio() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {featuredListings.map((property, index) => (
-              <PropertyCard key={property.id} property={property} index={index} />
+              <PropertyCard 
+                key={property.id} 
+                property={property} 
+                imageUrl={property.displayImage} // Pass explicit imageUrl prop
+                index={index} 
+              />
             ))}
           </div>
         </div>
       )}
 
-      {/* 2. PROOF OF SUCCESS */}
+      {/* 2. PROOF OF SUCCESS (SOLD) */}
       {soldListings.length > 0 && (
         <div>
           <div className="px-[8vw] mb-8">
@@ -82,10 +92,16 @@ export default function Portfolio() {
             onWheel={handleWheel}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="horizontal-scroll-section flex gap-6 md:gap-10 px-[8vw] overflow-x-scroll pt-6 pb-10 cursor-grab"
+            className="flex gap-6 md:gap-10 px-[8vw] overflow-x-auto pt-6 pb-10 cursor-grab no-scrollbar scroll-smooth"
           >
             {soldListings.map((property, index) => (
-              <PropertyCard key={property.id} property={property} index={index} />
+              <div key={property.id} className="min-w-[300px] md:min-w-[400px]">
+                <PropertyCard 
+                  property={property} 
+                  imageUrl={property.displayImage} // Pass explicit imageUrl prop
+                  index={index} 
+                />
+              </div>
             ))}
           </div>
         </div>
