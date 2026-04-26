@@ -29,10 +29,19 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
       return;
     }
 
+    // Debug logs
+    console.log("🔍 Submitting form with property:", property);
+    console.log("🔍 Property ID:", property?.id);
+
+    if (!property?.id) {
+      toast.error("Property information is missing. Please refresh the page.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('inquiries')
         .insert([
           {
@@ -42,14 +51,20 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
             property_id: property.id,
             type: "showing_request",
           }
-        ]);
+        ])
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error("❌ Supabase Insert Error:", error);
+        toast.error(`Submission failed: ${error.message}`);
+        throw error;
+      }
 
+      console.log("✅ Successfully inserted to Supabase:", data);
       setIsSubmitted(true);
-      toast.success("Showing request submitted.");
+      toast.success("Showing request submitted successfully!");
     } catch (error) {
-      console.error("Supabase Error:", error.message);
+      console.error("❌ Full error:", error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -107,7 +122,7 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
                 <p className="text-muted-foreground mb-10">{property.location}</p>
 
                 <div className="space-y-6">
-                  {/* Name */}
+                  {/* Name Field */}
                   <div className="space-y-1">
                     <Input
                       placeholder="Full name *"
@@ -120,7 +135,7 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
                     )}
                   </div>
 
-                  {/* Phone */}
+                  {/* Phone Field */}
                   <div className="space-y-1">
                     <Input
                       type="tel"
@@ -134,7 +149,7 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
                     )}
                   </div>
 
-                  {/* Notes */}
+                  {/* Message / Notes Field */}
                   <div className="space-y-1">
                     <Textarea
                       placeholder="Preferred date/time or any notes *"
