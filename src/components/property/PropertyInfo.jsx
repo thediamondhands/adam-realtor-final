@@ -22,7 +22,7 @@ export default function PropertyInfo({ property }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="relative z-10 bg-[#fdfbf7] pb-20 px-4 sm:px-6 md:px-8 pt-8 md:pt-10"
+      className="relative z-10 bg-[#fdfbf7] -mt-1 pb-20 px-4 sm:px-6 md:px-8 pt-10 md:pt-12"
     >
       {/* Header */}
       <div className="space-y-4 mb-8 md:mb-10">
@@ -85,7 +85,7 @@ export default function PropertyInfo({ property }) {
 
       {/* Map */}
       <div className="border-t structural-rule pt-8">
-        <div className="w-full h-[320px] md:h-[380px] rounded-xl overflow-hidden border structural-rule grayscale hover:grayscale-0 transition-all duration-700">
+        <div className="w-full h-[320px] md:h-[420px] rounded-xl overflow-hidden border structural-rule grayscale hover:grayscale-0 transition-all duration-700">
           <iframe
             width="100%"
             height="100%"
