@@ -24,43 +24,42 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
   };
 
   const handleSubmit = async () => {
-    if (!validate()) {
-      toast.error("Please fill out the required fields.");
-      return;
+  if (!validate()) {
+    toast.error("Please fill out the required fields.");
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    const payload = {
+      name: formData.name,
+      phone: formData.phone,
+      message: `${formData.message}\n\nProperty: ${property?.title || 'Unknown Property'}`,
+      type: "showing_request",
+    };
+
+    console.log("📤 Sending:", payload);
+
+    const { data, error } = await supabase
+      .from('inquiries')
+      .insert([payload]);   // ← No .select() here
+
+    if (error) {
+      console.error("❌ Supabase Error:", error);
+      toast.error("Submission failed. Please try again.");
+      throw error;
     }
 
-    setIsSubmitting(true);
-
-    try {
-      const { data, error } = await supabase
-        .from('inquiries')
-        .insert([
-          {
-            name: formData.name,
-            phone: formData.phone,
-            message: `${formData.message}\n\nProperty: ${property?.title || 'Unknown Property'}`,
-            type: "showing_request",
-          }
-        ])
-        .select();
-
-      if (error) {
-        console.error("Supabase Error:", error);
-        toast.error(error.message.includes("security") 
-          ? "Database permission error. Please check RLS policies." 
-          : `Error: ${error.message}`);
-        throw error;
-      }
-
-      console.log("✅ Submitted successfully:", data);
-      setIsSubmitted(true);
-      toast.success("Showing request submitted!");
-    } catch (error) {
-      console.error("Full error:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    console.log("✅ Successfully submitted!");
+    setIsSubmitted(true);
+    toast.success("Showing request submitted!");
+  } catch (error) {
+    console.error("Full error:", error);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const resetForm = () => {
     setIsSubmitted(false);
