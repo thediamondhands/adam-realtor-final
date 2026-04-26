@@ -36,7 +36,6 @@ export default function Portfolio() {
   if (error) return <div className="py-20 text-center text-red-500">Error loading: {error.message}</div>;
   if (!properties || properties.length === 0) return null;
 
-  // Filter and map properties with their calculated image URL
   const featuredListings = properties
     ?.filter(p => p.status?.toLowerCase() === "available" || p.status?.toLowerCase() === "featured")
     .map(p => ({ ...p, image: getImageUrl(p) })) || [];
@@ -44,6 +43,9 @@ export default function Portfolio() {
   const soldListings = properties
     ?.filter(p => p.status?.toLowerCase() === "sold")
     .map(p => ({ ...p, image: getImageUrl(p) })) || [];
+
+  // SHARED SIZING CLASS: This ensures Featured and Sold are identical
+  const cardSizeClass = "w-[80vw] md:w-[35vw] lg:w-[28vw]";
 
   return (
     <section className="py-16 space-y-24 bg-background">
@@ -60,18 +62,19 @@ export default function Portfolio() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {featuredListings.map((property, index) => (
-              <PropertyCard 
-                key={property.id} 
-                property={property} 
-                imageUrl={property.image}
-                index={index} 
-              />
+              <div key={property.id} className="w-full">
+                <PropertyCard 
+                  property={property} 
+                  imageUrl={property.image}
+                  index={index} 
+                />
+              </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* 2. SOLD LISTINGS (FIXED SIZING) */}
+      {/* 2. SOLD LISTINGS (SYNCED SIZING) */}
       {soldListings.length > 0 && (
         <div>
           <div className="px-[8vw] mb-8">
@@ -86,15 +89,11 @@ export default function Portfolio() {
             onWheel={handleWheel}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            /* items-start prevents the card from stretching vertically */
-            className="flex items-start gap-6 md:gap-10 px-[8vw] overflow-x-auto pt-6 pb-20 no-scrollbar scroll-smooth"
+            className="flex items-start gap-10 px-[8vw] overflow-x-auto pt-6 pb-20 no-scrollbar scroll-smooth"
           >
             {soldListings.map((property, index) => (
-              /* This wrapper div controls the card width in the horizontal scroll */
-              <div 
-                key={property.id} 
-                className="w-[80vw] md:w-[35vw] lg:w-[28vw] flex-shrink-0"
-              >
+              /* Use cardSizeClass here to match the visual footprint of the grid above */
+              <div key={property.id} className={`${cardSizeClass} flex-shrink-0`}>
                 <PropertyCard 
                   property={property} 
                   imageUrl={property.image}
