@@ -22,30 +22,29 @@ export default function PropertyInfo({ property }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      /* Using your site's background color and consistent mobile padding */
-      className="relative z-10 space-y-12 px-8 pb-20 pt-48 md:pt-10 bg-[#fdfbf7] font-sans"
+      className="relative z-10 space-y-12 px-8 pb-20 pt-48 md:pt-10 bg-[#fdfbf7]"
     >
-      {/* Header - Matches the Footer Heading Style */}
+      {/* Header */}
       <div className="space-y-4">
-        <p className="font-sans text-[10px] tracking-[0.3em] text-gray-500 uppercase">
+        <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
           {property.property_type?.replace('_', ' ') || "Residence"}
         </p>
         
-        <h1 className="font-serif text-4xl md:text-6xl font-light leading-tight text-[#2c2c2c]">
+        <h1 className="font-heading text-4xl md:text-6xl font-light leading-tight">
           {property.title}
         </h1>
 
-        <div className="flex items-start gap-2 text-gray-600 pt-1">
+        <div className="flex items-start gap-2 text-muted-foreground pt-1">
           <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
-          <span className="text-sm md:text-base tracking-wide uppercase font-light">
+          <span className="text-sm md:text-base leading-relaxed">
             {displayAddress}
           </span>
         </div>
       </div>
 
-      {/* Price - Serif style to match your branding */}
-      <div className="border-t border-b border-black/10 py-10">
-        <p className="font-serif text-4xl md:text-5xl font-light text-[#2c2c2c]">
+      {/* Price */}
+      <div className="border-t border-b structural-rule py-10">
+        <p className="font-heading text-4xl md:text-5xl font-light">
           {formatPrice(property.price)}
         </p>
       </div>
@@ -59,10 +58,10 @@ export default function PropertyInfo({ property }) {
           { icon: Calendar, label: "Year Built", value: property.year_built },
         ].map(({ icon: Icon, label, value }) => (
           value && (
-            <div key={label} className="flex flex-col border-l border-black/10 pl-4">
-              <Icon className="w-5 h-5 text-gray-400 mb-4" />
-              <p className="font-serif text-3xl font-light leading-none mb-2 text-[#2c2c2c]">{value}</p>
-              <p className="font-sans text-[9px] tracking-[0.2em] text-gray-500 uppercase">
+            <div key={label} className="flex flex-col">
+              <Icon className="w-5 h-5 text-muted-foreground mb-4" />
+              <p className="font-heading text-3xl font-light leading-none mb-2">{value}</p>
+              <p className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground uppercase">
                 {label}
               </p>
             </div>
@@ -70,19 +69,19 @@ export default function PropertyInfo({ property }) {
         ))}
       </div>
 
-      {/* Description - Sans style to match "Full-time Realtor..." text */}
+      {/* Description */}
       {property.description && (
         <div className="pt-6">
-          <h3 className="font-sans text-[10px] tracking-[0.3em] text-gray-500 uppercase mb-6">The Story</h3>
-          <p className="text-gray-700 leading-relaxed text-base md:text-lg font-light max-w-3xl">
+          <h3 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-6">Description</h3>
+          <p className="text-foreground text-sm md:text-base leading-relaxed max-w-3xl">
             {property.description}
           </p>
         </div>
       )}
 
       {/* Map */}
-      <div className="pt-6 border-t border-black/5">
-        <div className="w-full h-[350px] rounded-sm overflow-hidden border border-black/5 grayscale opacity-80 hover:opacity-100 hover:grayscale-0 transition-all duration-700">
+      <div className="pt-6 border-t structural-rule">
+        <div className="w-full h-[350px] rounded-sm overflow-hidden border structural-rule grayscale opacity-80 hover:opacity-100 hover:grayscale-0 transition-all duration-700">
           <iframe 
             width="100%" 
             height="100%" 
