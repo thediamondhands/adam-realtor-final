@@ -29,14 +29,7 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
       return;
     }
 
-    // Debug logs
-    console.log("🔍 Submitting form with property:", property);
-    console.log("🔍 Property ID:", property?.id);
-
-    if (!property?.id) {
-      toast.error("Property information is missing. Please refresh the page.");
-      return;
-    }
+    console.log("🔍 Submitting with property:", property?.title);
 
     setIsSubmitting(true);
 
@@ -48,21 +41,23 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
             name: formData.name,
             phone: formData.phone,
             message: formData.message,
-            property_id: property.id,
+            // Removed property_id since the column doesn't exist
             type: "showing_request",
+            // Optional: Add property title to message so you know which property it was for
+            message: `${formData.message}\n\nProperty: ${property?.title || 'Unknown'}`,
           }
         ])
         .select();
 
       if (error) {
-        console.error("❌ Supabase Insert Error:", error);
-        toast.error(`Submission failed: ${error.message}`);
+        console.error("❌ Supabase Error:", error);
+        toast.error(`Error: ${error.message}`);
         throw error;
       }
 
-      console.log("✅ Successfully inserted to Supabase:", data);
+      console.log("✅ Success:", data);
       setIsSubmitted(true);
-      toast.success("Showing request submitted successfully!");
+      toast.success("Showing request submitted!");
     } catch (error) {
       console.error("❌ Full error:", error);
       toast.error("Something went wrong. Please try again.");
@@ -122,7 +117,6 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
                 <p className="text-muted-foreground mb-10">{property.location}</p>
 
                 <div className="space-y-6">
-                  {/* Name Field */}
                   <div className="space-y-1">
                     <Input
                       placeholder="Full name *"
@@ -130,12 +124,9 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className={`bg-transparent h-12 ${errors.name ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                     />
-                    {errors.name && (
-                      <p className="text-[10px] text-red-500 uppercase tracking-wider">{errors.name}</p>
-                    )}
+                    {errors.name && <p className="text-[10px] text-red-500 uppercase tracking-wider">{errors.name}</p>}
                   </div>
 
-                  {/* Phone Field */}
                   <div className="space-y-1">
                     <Input
                       type="tel"
@@ -144,12 +135,9 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className={`bg-transparent h-12 ${errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                     />
-                    {errors.phone && (
-                      <p className="text-[10px] text-red-500 uppercase tracking-wider">{errors.phone}</p>
-                    )}
+                    {errors.phone && <p className="text-[10px] text-red-500 uppercase tracking-wider">{errors.phone}</p>}
                   </div>
 
-                  {/* Message / Notes Field */}
                   <div className="space-y-1">
                     <Textarea
                       placeholder="Preferred date/time or any notes *"
@@ -157,9 +145,7 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       className={`bg-transparent min-h-[100px] ${errors.message ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                     />
-                    {errors.message && (
-                      <p className="text-[10px] text-red-500 uppercase tracking-wider">{errors.message}</p>
-                    )}
+                    {errors.message && <p className="text-[10px] text-red-500 uppercase tracking-wider">{errors.message}</p>}
                   </div>
 
                   <Button
