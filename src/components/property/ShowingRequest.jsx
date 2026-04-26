@@ -57,6 +57,26 @@ export default function ShowingRequest({ property, isOpen, onClose }) {
     }
   };
 
+
+  if (isSubmitted) {
+    return (
+      <section id="discovery" className="py-24 md:py-32 px-[8vw] border-t structural-rule">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center max-w-lg mx-auto"
+        >
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
+            <Check className="w-8 h-8 text-primary" />
+          </div>
+          <h2 className="font-heading text-4xl md:text-5xl font-light mb-4">Thank you!</h2>
+          <p className="text-muted-foreground text-lg">
+            Adam will personally reach out to you shortly.
+          </p>
+        </motion.div>
+      </section>
+    );
+  }
   return (
     <AnimatePresence>
       {isOpen && (
