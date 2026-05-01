@@ -1,0 +1,9 @@
+# robots.txt for adamlesterrealtor.com
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://adamlesterrealtor.com/sitemap.xml
+
+# Optional: Block any unwanted paths (currently none)
+Disallow: /api/
