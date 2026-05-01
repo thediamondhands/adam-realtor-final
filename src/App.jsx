@@ -14,6 +14,7 @@ import RecentlySold from './pages/RecentlySold';
 import PropertyDetail from './pages/PropertyDetail';
 import Inquiry from './pages/Inquiry';
 import About from './pages/About';
+import ParrishGuide from './pages/ParrishGuide';
 
 // Scroll to top on every route change
 function ScrollToTop() {
@@ -64,6 +65,7 @@ const AuthenticatedApp = () => {
           <Route path="/property/:slug" element={<PropertyDetail />} />
           <Route path="/inquiry" element={<Inquiry />} />
           <Route path="/about" element={<About />} />
+          <Route path="/parrish-fl-real-estate-guide" element={<ParrishGuide />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

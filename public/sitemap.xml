@@ -38,6 +38,14 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Service Area Landing Pages -->
+  <url>
+    <loc>https://adamlesterrealtor.com/parrish-fl-real-estate-guide</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <!-- Individual Property Pages -->
   <url>
     <loc>https://adamlesterrealtor.com/property/5510-e-longboat-blvd</loc>
