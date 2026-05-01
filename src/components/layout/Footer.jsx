@@ -34,6 +34,19 @@ export default function Footer() {
             <a href="https://www.instagram.com/FL_Realtor_Adam" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">@FL_Realtor_Adam</a>
             <p>10905 Erie Rd, Parrish, FL 34219</p>
           </div>
+
+          <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mt-8 mb-4">
+            Service Areas
+          </p>
+          <div className="flex flex-col gap-3 text-sm">
+            <Link
+              to="/parrish-fl-real-estate-guide"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="text-muted-foreground/60 hover:text-primary transition-colors"
+            >
+              Parrish, FL Community Guide
+            </Link>
+          </div>
         </div>
       </div>
 
