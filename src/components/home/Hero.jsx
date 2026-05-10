@@ -29,7 +29,7 @@ export default function Hero({ property }) {
             <h1 className="font-heading text-white text-5xl md:text-6xl lg:text-[8vw] leading-[0.9] font-light">
               Adam Lester,
               <br />
-              <span className="italic font-light">Realtor®</span>
+              <span className="italic font-light">Realtor® in Parrish, FL</span>
             </h1>
           </motion.div>
 
