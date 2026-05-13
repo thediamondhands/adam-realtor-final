@@ -45,15 +45,15 @@ export default function About() {
             Realtor®  ·  MidWest Florida
           </p>
           <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-light leading-[0.95] mb-8">
-            A full-service approach,
+            A native perspective,
             <br />
-            <span className="italic">without the shortcuts.</span>
+            <span className="italic">with local roots.</span>
           </h2>
           <p className="text-muted-foreground leading-relaxed max-w-lg mb-6">
-            I am a full-time Realtor® serving Manatee, Sarasota, Pinellas, and Hillsborough County. My practice is primarily focused on listings, but I take on a limited number of qualified buyers so every client receives my complete attention.
+            Born in Clearwater and a Parrish resident for the last two decades, I have witnessed the Gulf Coast’s transformation firsthand. My practice as a full-time Realtor® is built on this history, serving Manatee, Sarasota, Pinellas, and Hillsborough County with a focus on high-standard listings and a limited number of qualified buyers.
           </p>
           <p className="text-muted-foreground leading-relaxed max-w-lg">
-            Real estate is a relationship business. My goal is to make the process feel considered and transparent — from the first conversation to the closing table — so the outcome reflects the care that went into it.
+            Real estate is a relationship business. My goal is to move past standard industry shortcuts to make the process feel considered, transparent, and aligned with the unique character of the Florida communities I call home.
           </p>
         </motion.div>
       </div>
@@ -80,20 +80,12 @@ export default function About() {
         <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-10">
           {[
             {
-              title: "Availability",
-              body: "Seven days a week, 365 days a year. Your questions do not wait until Monday.",
+              title: "Direct Accountability",
+              body: "No assistants or hand-offs. You have a direct line to me seven days a week, ensuring total continuity and responsiveness from start to finish.",
             },
             {
-              title: "Discretion",
-              body: "Quiet, careful representation. Sensitive transactions are handled with the privacy they deserve.",
-            },
-            {
-              title: "Local Expertise",
-              body: "A focused footprint across the Gulf Coast markets I know best, rather than a territory stretched too thin.",
-            },
-            {
-              title: "Results",
-              body: "Clear strategy, considered pricing, and a marketing standard built around how a home is actually perceived.",
+              title: "Native Insight",
+              body: "With twenty years in Parrish and deep roots on the coast, I provide the context required to navigate this region's specific micro-markets through every phase of a transaction.",
             },
           ].map((item, i) => (
             <motion.div
