@@ -33,6 +33,18 @@ export default function Footer() {
             <a href="mailto:Contact.AdamLester@gmail.com" className="hover:text-primary transition-colors">Contact.AdamLester@gmail.com</a>
             <a href="https://www.instagram.com/FL_Realtor_Adam" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">@FL_Realtor_Adam</a>
             <p>10905 Erie Rd, Parrish, FL 34219</p>
+
+            {/* Your Custom Map Locator */}
+            <div className="mt-6 rounded-xl overflow-hidden border border-muted h-[250px] w-full shadow-sm">
+              <iframe 
+                src="https://storage.googleapis.com/maps-solutions-hlhqmfxdoe/locator-plus/3abw/locator-plus.html"
+                width="100%" 
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                title="Office Locator"
+              ></iframe>
+            </div>
           </div>
         </div>
       </div>
