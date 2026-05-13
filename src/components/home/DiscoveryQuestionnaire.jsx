@@ -63,7 +63,7 @@ export default function DiscoveryQuestionnaire() {
           </div>
           <h2 className="font-heading text-4xl md:text-5xl font-light mb-4">Thank you!</h2>
           <p className="text-muted-foreground text-lg">
-            Adam will personally reach out to you shortly.
+            I will personally reach out to you shortly.
           </p>
         </motion.div>
       </section>
@@ -80,13 +80,13 @@ export default function DiscoveryQuestionnaire() {
           Let's Talk Real Estate
         </h2>
         <p className="text-muted-foreground mb-10 max-w-lg">
-          Interested in a free consultation, your home's value, MLS buyer home search, or recommended lending partners? Fill out this quick form and Adam will personally reach out. No ads, no spam, just friendly real estate advice.
+          Interested in a free consultation, your home's value, MLS buyer home search, or recommended lending partners? Fill out this quick form and I will personally reach out. No ads, no spam, just friendly real estate advice.
         </p>
 
         <div className="flex flex-col gap-5">
           <div>
             <label className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase mb-2 block">
-              Tell Adam about your real estate needs *
+              Tell me about your real estate needs *
             </label>
             <Textarea
               placeholder="Describe your property, location, what kind of help or information you are looking for..."
